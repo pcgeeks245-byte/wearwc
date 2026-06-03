@@ -8,63 +8,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
         
         body { 
             font-family: 'Inter', sans-serif; 
-            /* Merges background.png with a gorgeous dark glass-tint mask */
-            background: linear-gradient(rgba(2, 11, 8, 0.94), rgba(2, 11, 8, 0.94)), url('background.png') no-repeat center center fixed;
+            /* Merges background.png with a gorgeous bright glass-tint mask */
+            background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('background.png') no-repeat center center fixed;
             background-size: cover;
         }
 
-        /* Webkit scrollbar stylings */
+        /* Webkit scrollbar stylings for light theme */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #020b08; }
-        ::-webkit-scrollbar-thumb { background: #14532d; border-radius: 10px; }
-
-        /* Premium custom glow animations */
-        @keyframes pulseGlow {
-            0%, 100% { shadow: 0 0 12px rgba(16, 185, 129, 0.2); }
-            50% { transform: scale(1.02); box-shadow: 0 0 25px rgba(16, 185, 129, 0.5); }
-        }
-        .animate-pulse-glow {
-            animation: pulseGlow 3s infinite ease-in-out;
-        }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     </style>
 </head>
-<body class="text-gray-300 flex min-h-screen selection:bg-emerald-900 selection:text-white antialiased">
+<body class="text-slate-800 flex min-h-screen selection:bg-emerald-200 selection:text-emerald-900 antialiased">
 
     <!-- MAIN DASHBOARD CONTENT CONTAINER -->
     <main class="flex-1 p-6 md:p-10 overflow-y-auto">
         
         <!-- TOP NAVIGATION CONTROL PANEL -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b border-emerald-950/40">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b border-slate-200">
             <div>
-                <h1 class="text-2xl md:text-3xl font-bold text-white tracking-tight">Command Center</h1>
-                <p class="text-[#4ade80] text-sm mt-1 flex items-center gap-2 font-medium tracking-wide">
-                    <span class="w-2.5 h-2.5 rounded-full bg-[#4ade80] animate-ping absolute opacity-75"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-[#4ade80] relative shadow-[0_0_10px_#4ade80]"></span>
+                <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Command Center</h1>
+                <p class="text-emerald-600 text-sm mt-1 flex items-center gap-2 font-medium tracking-wide">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
                     Live Data Engine Active
                 </p>
             </div>
             
             <!-- CORE BACKUP & RESTORE UTILITIES -->
-            <div class="flex items-center gap-3 bg-[#05130e]/80 backdrop-blur-xl p-2.5 rounded-xl border border-[#0f3024]">
+            <div class="flex items-center gap-3 bg-white/80 backdrop-blur-xl p-2.5 rounded-xl border border-slate-200 shadow-sm">
                 <!-- Backup Button -->
-                <button onclick="exportBackup()" class="transform transition-all duration-200 hover:scale-105 active:scale-95 bg-gradient-to-r from-emerald-900 via-[#0f3024] to-emerald-950 hover:from-emerald-800 hover:to-emerald-900 text-emerald-400 text-xs font-semibold px-4 py-2.5 rounded-lg border border-emerald-800/40 flex items-center gap-2 tracking-wide cursor-pointer shadow-lg">
+                <button onclick="exportBackup()" class="transform transition-all duration-200 hover:scale-105 active:scale-95 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-2.5 rounded-lg border border-emerald-200 flex items-center gap-2 tracking-wide cursor-pointer shadow-sm">
                     <i class="fa-solid fa-cloud-arrow-down text-sm"></i> Backup Data
                 </button>
                 
                 <!-- Restore Trigger -->
                 <div class="relative group">
                     <input type="file" id="importFile" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="importBackup(event)">
-                    <button class="transform transition-all duration-200 group-hover:scale-105 active:scale-95 bg-[#05130e] hover:bg-[#0a1f17] text-gray-400 group-hover:text-gray-200 text-xs font-semibold px-4 py-2.5 rounded-lg border border-[#0f3024] flex items-center gap-2 tracking-wide">
-                        <i class="fa-solid fa-cloud-arrow-up text-sm text-emerald-600"></i> Restore
+                    <button class="transform transition-all duration-200 group-hover:scale-105 active:scale-95 bg-white hover:bg-slate-50 text-slate-600 group-hover:text-slate-900 text-xs font-bold px-4 py-2.5 rounded-lg border border-slate-200 flex items-center gap-2 tracking-wide shadow-sm">
+                        <i class="fa-solid fa-cloud-arrow-up text-sm text-emerald-500"></i> Restore
                     </button>
                 </div>
 
                 <!-- Wipe Utility -->
-                <button onclick="factoryReset()" class="transform transition-all duration-200 hover:bg-red-500/20 active:scale-95 bg-red-500/5 text-red-400 text-xs font-semibold px-4 py-2.5 rounded-lg border border-red-500/20 tracking-wide cursor-pointer">
+                <button onclick="factoryReset()" class="transform transition-all duration-200 hover:bg-rose-50 active:scale-95 bg-white text-rose-500 hover:text-rose-600 text-xs font-bold px-4 py-2.5 rounded-lg border border-rose-100 tracking-wide cursor-pointer shadow-sm">
                     Reset
                 </button>
             </div>
@@ -72,49 +64,49 @@
 
         <!-- KPI PERFORMANCE GRID -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-[#061812]/90 backdrop-blur-md p-6 rounded-2xl border border-[#0f3024] relative overflow-hidden shadow-xl">
-                <p class="text-xs font-bold text-emerald-600/70 uppercase tracking-widest">Total Revenue</p>
-                <h3 class="text-3xl font-black text-emerald-400 mt-2 tracking-tight" id="kpi-revenue">$0.00</h3>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-emerald-100 relative overflow-hidden shadow-lg shadow-emerald-900/5">
+                <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Total Revenue</p>
+                <h3 class="text-3xl font-black text-emerald-600 mt-2 tracking-tight" id="kpi-revenue">$0.00</h3>
             </div>
-            <div class="bg-[#061812]/90 backdrop-blur-md p-6 rounded-2xl border border-[#0f3024] shadow-xl">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Total Orders</p>
-                <h3 class="text-3xl font-black text-white mt-2 tracking-tight" id="kpi-orders">0</h3>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Orders</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-2 tracking-tight" id="kpi-orders">0</h3>
             </div>
-            <div class="bg-[#061812]/90 backdrop-blur-md p-6 rounded-2xl border border-[#0f3024] shadow-xl">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Watches Sold</p>
-                <h3 class="text-3xl font-black text-white mt-2 tracking-tight" id="kpi-sold">0</h3>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Watches Sold</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-2 tracking-tight" id="kpi-sold">0</h3>
             </div>
-            <div class="bg-[#061812]/90 backdrop-blur-md p-6 rounded-2xl border border-[#0f3024] shadow-xl">
-                <p class="text-xs font-bold text-gray-500 uppercase tracking-widest">Avg. Order Value</p>
-                <h3 class="text-3xl font-black text-white mt-2 tracking-tight" id="kpi-aov">$0.00</h3>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50">
+                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Avg. Order Value</p>
+                <h3 class="text-3xl font-black text-slate-800 mt-2 tracking-tight" id="kpi-aov">$0.00</h3>
             </div>
         </section>
 
         <!-- DATA VISUALIZATION SECTION -->
         <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
             <!-- Revenue Trajectory Chart -->
-            <div class="bg-[#061812]/90 backdrop-blur-md p-6 rounded-2xl border border-[#0f3024] xl:col-span-2 flex flex-col shadow-xl">
-                <h4 class="text-base font-bold text-emerald-50 mb-4 tracking-wide">Revenue Trajectory</h4>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 xl:col-span-2 flex flex-col shadow-lg shadow-slate-200/50">
+                <h4 class="text-base font-bold text-slate-800 mb-4 tracking-wide">Revenue Trajectory</h4>
                 <div class="flex-1 min-h-[250px]"><canvas id="revenueChart"></canvas></div>
             </div>
 
             <!-- Shipping Geographic Mix Chart -->
-            <div class="bg-[#061812]/90 backdrop-blur-md p-6 rounded-2xl border border-[#0f3024] flex flex-col shadow-xl">
-                <h4 class="text-base font-bold text-emerald-50 mb-4 tracking-wide">Global Destinations</h4>
+            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 flex flex-col shadow-lg shadow-slate-200/50">
+                <h4 class="text-base font-bold text-slate-800 mb-4 tracking-wide">Global Destinations</h4>
                 <div class="flex-1 min-h-[250px] flex justify-center items-center"><canvas id="shippingChart"></canvas></div>
             </div>
         </section>
 
         <!-- STOCK INDEX INVENTORY TRACKER -->
-        <section class="bg-[#061812]/90 backdrop-blur-md rounded-2xl border border-[#0f3024] overflow-hidden mb-8 shadow-xl">
-            <div class="p-6 border-b border-[#0f3024] bg-[#04110c]/40">
-                <h4 class="text-base font-bold text-emerald-50 tracking-wide">Stock Management Inventory</h4>
-                <p class="text-xs text-gray-500 mt-1">Live stock index tracker. Creating sales adjusts your baseline automatically.</p>
+        <section class="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200 overflow-hidden mb-8 shadow-lg shadow-slate-200/50">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
+                <h4 class="text-base font-bold text-slate-800 tracking-wide">Stock Management Inventory</h4>
+                <p class="text-xs text-slate-500 mt-1">Live stock index tracker. Creating sales adjusts your baseline automatically.</p>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-[#05130e] border-b border-[#0f3024] text-emerald-600/70 text-xs font-bold uppercase tracking-widest">
+                        <tr class="bg-slate-50 border-b border-slate-200 text-emerald-700 text-xs font-bold uppercase tracking-widest">
                             <th class="p-4">SKU Code</th>
                             <th class="p-4">Model Blueprint</th>
                             <th class="p-4">Retail Price</th>
@@ -122,7 +114,7 @@
                             <th class="p-4">Availability</th>
                         </tr>
                     </thead>
-                    <tbody id="inventoryTableBody" class="divide-y divide-[#0f3024]/40 text-sm">
+                    <tbody id="inventoryTableBody" class="divide-y divide-slate-100 text-sm">
                         <!-- Filled by script dynamically -->
                     </tbody>
                 </table>
@@ -130,22 +122,22 @@
         </section>
 
         <!-- DETAILED TRANSACTION ENGINE LOGS -->
-        <section class="bg-[#061812]/90 backdrop-blur-md rounded-2xl border border-[#0f3024] overflow-hidden shadow-xl">
-            <div class="p-6 border-b border-[#0f3024] bg-[#04110c]/40 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <section class="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200 overflow-hidden shadow-lg shadow-slate-200/50">
+            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h4 class="text-base font-bold text-emerald-50 tracking-wide">Customer Log Transmissions</h4>
-                    <p class="text-xs text-gray-500 mt-1">Detailed secure storage history for global fulfillment.</p>
+                    <h4 class="text-base font-bold text-slate-800 tracking-wide">Customer Log Transmissions</h4>
+                    <p class="text-xs text-slate-500 mt-1">Detailed secure storage history for global fulfillment.</p>
                 </div>
                 
                 <!-- Premium Animated Record Button -->
-                <button onclick="openOrderModal()" class="transform transition-all duration-300 hover:scale-105 active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-[#020b08] text-sm font-bold px-6 py-3 rounded-xl flex items-center gap-2 cursor-pointer border border-emerald-400/20 tracking-wider shadow-[0_0_20px_rgba(16,185,129,0.25)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]">
+                <button onclick="openOrderModal()" class="transform transition-all duration-300 hover:scale-105 active:scale-95 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold px-6 py-3 rounded-xl flex items-center gap-2 cursor-pointer shadow-[0_4px_14px_0_rgba(16,185,129,0.39)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.23)] border border-emerald-400">
                     <i class="fa-solid fa-circle-plus text-base"></i> Record Sale
                 </button>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
-                        <tr class="bg-[#05130e] border-b border-[#0f3024] text-emerald-600/70 text-xs font-bold uppercase tracking-widest">
+                        <tr class="bg-slate-50 border-b border-slate-200 text-emerald-700 text-xs font-bold uppercase tracking-widest">
                             <th class="p-4">Order Ref</th>
                             <th class="p-4">Client Information</th>
                             <th class="p-4">Watch Profile</th>
@@ -155,7 +147,7 @@
                             <th class="p-4 text-center">Fulfillment</th>
                         </tr>
                     </thead>
-                    <tbody id="ordersTableBody" class="divide-y divide-[#0f3024]/40 text-sm">
+                    <tbody id="ordersTableBody" class="divide-y divide-slate-100 text-sm">
                         <!-- Filled by script dynamically -->
                     </tbody>
                 </table>
@@ -164,48 +156,48 @@
     </main>
 
     <!-- ACCOUNT TRANSACTION CREATION MODAL -->
-    <div id="addOrderModal" class="fixed inset-0 bg-[#020b08]/85 backdrop-blur-md hidden flex justify-center items-center z-50 p-4 overflow-y-auto">
-        <div class="bg-[#061812] border border-[#0f3024] p-6 md:p-8 rounded-2xl w-full max-w-2xl shadow-2xl transition-all my-auto">
-            <h2 class="text-xl font-bold text-white tracking-wide">Log New Financial Record</h2>
-            <p class="text-xs text-gray-500 mb-6">File client details. Database engines adapt quantities synchronously.</p>
+    <div id="addOrderModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4 overflow-y-auto">
+        <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl w-full max-w-2xl shadow-2xl transition-all my-auto">
+            <h2 class="text-xl font-black text-slate-800 tracking-wide">Log New Financial Record</h2>
+            <p class="text-xs text-slate-500 mb-6">File client details. Database engines adapt quantities synchronously.</p>
             
             <form id="orderForm" onsubmit="addOrder(event)">
                 <!-- Step 1: Client Metadata -->
-                <div class="bg-[#05130e]/90 border border-[#0f3024] p-5 rounded-xl mb-6">
-                    <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-4"><i class="fa-solid fa-user-shield mr-2 opacity-70"></i> 1. Client Identity</h3>
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl mb-6 shadow-sm">
+                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-user-shield mr-2 opacity-70"></i> 1. Client Identity</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1 font-medium">Full Name</label>
-                            <input type="text" id="clientName" required placeholder="Johnathan Doe" class="w-full bg-[#020b08] border border-[#0f3024] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 placeholder-gray-800 transition">
+                            <label class="block text-xs text-slate-600 mb-1 font-bold">Full Name</label>
+                            <input type="text" id="clientName" required placeholder="Johnathan Doe" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-slate-400 transition">
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1 font-medium">Contact Method (Email/Phone)</label>
-                            <input type="text" id="clientContact" placeholder="+1 (555) 019-2831" class="w-full bg-[#020b08] border border-[#0f3024] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 placeholder-gray-800 transition">
+                            <label class="block text-xs text-slate-600 mb-1 font-bold">Contact Method (Email/Phone)</label>
+                            <input type="text" id="clientContact" placeholder="+1 (555) 019-2831" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-slate-400 transition">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-xs text-gray-400 mb-1 font-medium">Target Destination (City, Country)</label>
-                            <input type="text" id="clientDest" required placeholder="Paris, France" class="w-full bg-[#020b08] border border-[#0f3024] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 placeholder-gray-800 transition">
+                            <label class="block text-xs text-slate-600 mb-1 font-bold">Target Destination (City, Country)</label>
+                            <input type="text" id="clientDest" required placeholder="Paris, France" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-slate-400 transition">
                         </div>
                     </div>
                 </div>
 
                 <!-- Step 2: Product Metrics -->
-                <div class="bg-[#05130e]/90 border border-[#0f3024] p-5 rounded-xl mb-6">
-                    <h3 class="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-4"><i class="fa-solid fa-box-open mr-2 opacity-70"></i> 2. Logistics & Ledger</h3>
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl mb-6 shadow-sm">
+                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-box-open mr-2 opacity-70"></i> 2. Logistics & Ledger</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="md:col-span-2">
-                            <label class="block text-xs text-gray-400 mb-1 font-medium">Select Product From Vault</label>
-                            <select id="productSelect" required onchange="updateFormPrice()" class="w-full bg-[#020b08] border border-[#0f3024] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 cursor-pointer transition">
+                            <label class="block text-xs text-slate-600 mb-1 font-bold">Select Product From Vault</label>
+                            <select id="productSelect" required onchange="updateFormPrice()" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 cursor-pointer transition">
                                 <!-- Loaded dynamically via engine -->
                             </select>
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1 font-medium">Agreed Execution Value ($)</label>
-                            <input type="number" id="amountInput" step="0.01" required class="w-full bg-[#020b08] border border-[#0f3024] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 transition">
+                            <label class="block text-xs text-slate-600 mb-1 font-bold">Agreed Execution Value ($)</label>
+                            <input type="number" id="amountInput" step="0.01" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
                         </div>
                         <div>
-                            <label class="block text-xs text-gray-400 mb-1 font-medium">Fulfillment Status</label>
-                            <select id="statusInput" class="w-full bg-[#020b08] border border-[#0f3024] rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-emerald-500 cursor-pointer transition">
+                            <label class="block text-xs text-slate-600 mb-1 font-bold">Fulfillment Status</label>
+                            <select id="statusInput" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 cursor-pointer transition">
                                 <option value="Processing">Processing</option>
                                 <option value="Shipped">Shipped</option>
                                 <option value="Delivered">Delivered</option>
@@ -216,8 +208,8 @@
 
                 <!-- Footer Dynamic Action Bar -->
                 <div class="flex gap-3 justify-end items-center">
-                    <button type="button" onclick="closeModal('addOrderModal')" class="px-5 py-2.5 text-sm font-semibold text-gray-400 hover:text-white hover:underline transition">Abort</button>
-                    <button type="submit" class="transform transition-all duration-200 hover:scale-105 active:scale-95 px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 text-[#020b08] text-sm font-bold rounded-xl tracking-wider shadow-lg">Commit Entry</button>
+                    <button type="button" onclick="closeModal('addOrderModal')" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 transition">Abort</button>
+                    <button type="submit" class="transform transition-all duration-200 hover:scale-105 active:scale-95 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl tracking-wider shadow-[0_4px_14px_0_rgba(16,185,129,0.39)]">Commit Entry</button>
                 </div>
             </form>
         </div>
@@ -225,7 +217,7 @@
 
     <!-- ENGINE JAVASCRIPT EXECUTIONS -->
     <script>
-        // 1. RAW SECURE DEFAULT SCHEMA (Zero Revenue Initialized)
+        // 1. RAW SECURE DEFAULT SCHEMA
         const defaultData = {
             revenue: 0,
             ordersCount: 0,
@@ -243,7 +235,7 @@
         };
 
         // 2. Initialize Internal Engine Instance
-        let appData = JSON.parse(localStorage.getItem('hqBlackGreenData')) || defaultData;
+        let appData = JSON.parse(localStorage.getItem('hqWhiteGreenData')) || defaultData;
         let revChartInstance = null;
         let shipChartInstance = null;
 
@@ -261,17 +253,17 @@
             const invTable = document.getElementById('inventoryTableBody');
             invTable.innerHTML = '';
             appData.inventory.forEach(item => {
-                let stockStatus = item.stock > 10 ? '<span class="text-emerald-400 font-medium">Optimal</span>' : 
-                                  item.stock > 0 ? '<span class="text-yellow-500 font-medium">Critical</span>' : 
-                                  '<span class="text-red-500 font-bold">Depleted</span>';
+                let stockStatus = item.stock > 10 ? '<span class="text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 font-bold">Optimal</span>' : 
+                                  item.stock > 0 ? '<span class="text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-100 font-bold">Critical</span>' : 
+                                  '<span class="text-rose-600 bg-rose-50 px-2 py-1 rounded border border-rose-100 font-black">Depleted</span>';
                 
                 invTable.innerHTML += `
-                    <tr class="hover:bg-[#0a1f17]/40 transition duration-150">
-                        <td class="p-4 font-mono text-xs text-gray-500">${item.id}</td>
-                        <td class="p-4 font-semibold text-gray-200">${item.name}</td>
-                        <td class="p-4 font-mono text-emerald-400/80">$${item.price.toFixed(2)}</td>
-                        <td class="p-4 font-bold ${item.stock <= 5 ? 'text-red-400' : 'text-white'}">${item.stock} Units</td>
-                        <td class="p-4 text-xs uppercase tracking-wider">${stockStatus}</td>
+                    <tr class="hover:bg-slate-50 transition duration-150">
+                        <td class="p-4 font-mono text-xs text-slate-500">${item.id}</td>
+                        <td class="p-4 font-bold text-slate-800">${item.name}</td>
+                        <td class="p-4 font-mono text-emerald-600 font-medium">$${item.price.toFixed(2)}</td>
+                        <td class="p-4 font-black ${item.stock <= 5 ? 'text-rose-500' : 'text-slate-800'}">${item.stock} Units</td>
+                        <td class="p-4 text-[10px] uppercase tracking-wider">${stockStatus}</td>
                     </tr>
                 `;
             });
@@ -280,26 +272,26 @@
             const orderTable = document.getElementById('ordersTableBody');
             orderTable.innerHTML = '';
             if (appData.orders.length === 0) {
-                orderTable.innerHTML = `<tr><td colspan="7" class="p-12 text-center text-gray-600 italic tracking-wider">No transaction pipelines logged in local buffer memory.</td></tr>`;
+                orderTable.innerHTML = `<tr><td colspan="7" class="p-12 text-center text-slate-400 italic tracking-wider font-medium">No transaction pipelines logged in local buffer memory.</td></tr>`;
             } else {
                 appData.orders.forEach((order, index) => {
-                    let statusColor = order.status === 'Delivered' ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/10' : 
-                                      order.status === 'Shipped' ? 'text-blue-400 border-blue-500/20 bg-blue-500/10' : 
-                                      'text-yellow-400 border-yellow-500/20 bg-yellow-500/10';
+                    let statusColor = order.status === 'Delivered' ? 'text-emerald-700 border-emerald-200 bg-emerald-50' : 
+                                      order.status === 'Shipped' ? 'text-blue-700 border-blue-200 bg-blue-50' : 
+                                      'text-amber-700 border-amber-200 bg-amber-50';
 
                     orderTable.innerHTML += `
-                        <tr class="hover:bg-[#0a1f17]/40 transition duration-150">
-                            <td class="p-4 font-mono text-xs text-emerald-500">#${order.id}</td>
+                        <tr class="hover:bg-slate-50 transition duration-150">
+                            <td class="p-4 font-mono text-xs text-emerald-600 font-bold">#${order.id}</td>
                             <td class="p-4">
-                                <p class="font-bold text-white">${order.clientName}</p>
-                                <p class="text-xs text-gray-500 font-mono">${order.clientContact || 'No Secondary Comm Vector'}</p>
+                                <p class="font-black text-slate-800">${order.clientName}</p>
+                                <p class="text-xs text-slate-500 font-mono">${order.clientContact || 'No Secondary Comm Vector'}</p>
                             </td>
-                            <td class="p-4 text-gray-300 font-medium">${order.product}</td>
-                            <td class="p-4 text-gray-400"><i class="fa-solid fa-location-arrow text-emerald-500 mr-2 opacity-50"></i>${order.dest}</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest rounded border ${statusColor}">${order.status}</span></td>
-                            <td class="p-4 text-right font-bold text-emerald-400 font-mono">$${order.amount.toFixed(2)}</td>
+                            <td class="p-4 text-slate-700 font-bold">${order.product}</td>
+                            <td class="p-4 text-slate-500 font-medium"><i class="fa-solid fa-location-arrow text-emerald-500 mr-2"></i>${order.dest}</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-[10px] font-black uppercase tracking-widest rounded border ${statusColor}">${order.status}</span></td>
+                            <td class="p-4 text-right font-black text-emerald-600 font-mono">$${order.amount.toFixed(2)}</td>
                             <td class="p-4 text-center">
-                                <button onclick="deleteOrder(${index})" class="transform transition-all duration-150 hover:scale-110 active:scale-90 text-gray-600 hover:text-red-400 p-2 cursor-pointer" title="Rollback Transaction">
+                                <button onclick="deleteOrder(${index})" class="transform transition-all duration-150 hover:scale-110 active:scale-90 text-slate-400 hover:text-rose-500 p-2 cursor-pointer" title="Rollback Transaction">
                                     <i class="fa-solid fa-arrow-rotate-left"></i>
                                 </button>
                             </td>
@@ -311,7 +303,7 @@
             // Sync visual monitoring canvas analytics
             renderCharts();
             // Cache mirror data array natively
-            localStorage.setItem('hqBlackGreenData', JSON.stringify(appData));
+            localStorage.setItem('hqWhiteGreenData', JSON.stringify(appData));
         }
 
         // 4. Modal Visibility & Dropdown Controllers
@@ -397,12 +389,10 @@
 
         // 7. DESKTOP EXPORT/IMPORT SYSTEM (Native File Processing Engine)
         function exportBackup() {
-            // Converts internal state database to structured clean JSON code
             const dataStr = JSON.stringify(appData, null, 4);
             const blob = new Blob([dataStr], { type: "application/json" });
             const blobUrl = URL.createObjectURL(blob);
             
-            // Synthesize click mechanism to prompt desktop storage interaction
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", blobUrl);
             downloadAnchorNode.setAttribute("download", "HQ_Ledger_Backup_" + new Date().toISOString().split('T')[0] + ".json");
@@ -410,7 +400,6 @@
             
             downloadAnchorNode.click();
             
-            // Unlink resources safely
             downloadAnchorNode.remove();
             URL.revokeObjectURL(blobUrl);
         }
@@ -423,7 +412,6 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    // Standard structural format validation routine
                     if(importedData && importedData.inventory !== undefined && importedData.orders !== undefined) {
                         appData = importedData;
                         renderDashboard();
@@ -446,9 +434,9 @@
         }
 
         // 8. DATA GRAPHING SCHEMATICS 
-        Chart.defaults.color = '#4b5563';
-        Chart.defaults.borderColor = '#0f3024';
+        Chart.defaults.color = '#64748b'; // slate-500
         Chart.defaults.font.family = 'Inter';
+        Chart.defaults.font.weight = '600';
 
         function renderCharts() {
             if(revChartInstance) revChartInstance.destroy();
@@ -462,13 +450,15 @@
                     datasets: [{ 
                         data: appData.chartData, 
                         borderColor: '#10b981', 
-                        backgroundColor: 'rgba(16, 185, 129, 0.03)', 
-                        borderWidth: 2, 
+                        backgroundColor: 'rgba(16, 185, 129, 0.15)', 
+                        borderWidth: 3, 
                         fill: true, 
                         tension: 0.4,
-                        pointBackgroundColor: '#020b08',
+                        pointBackgroundColor: '#ffffff',
                         pointBorderColor: '#10b981',
-                        pointBorderWidth: 2
+                        pointBorderWidth: 3,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
                     }]
                 },
                 options: { 
@@ -476,7 +466,7 @@
                     maintainAspectRatio: false, 
                     plugins: { legend: { display: false } }, 
                     scales: { 
-                        y: { grid: { color: '#0f3024', drawBorder: false }, beginAtZero: true }, 
+                        y: { grid: { color: '#e2e8f0', drawBorder: false }, beginAtZero: true }, 
                         x: { grid: { display: false }, drawBorder: false } 
                     } 
                 }
@@ -488,20 +478,20 @@
             
             const chartLabels = locKeys.length > 0 ? locKeys : ['Awaiting Terminals'];
             const chartData = locValues.length > 0 ? locValues : [1];
-            const chartColors = locValues.length > 0 ? ['#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899'] : ['#0f3024'];
+            const chartColors = locValues.length > 0 ? ['#10b981', '#0ea5e9', '#f59e0b', '#8b5cf6', '#f43f5e'] : ['#e2e8f0'];
 
             shipChartInstance = new Chart(document.getElementById('shippingChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: chartLabels,
-                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 0, hoverOffset: 4 }]
+                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2, borderColor: '#ffffff', hoverOffset: 6 }]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    cutout: '78%',
+                    cutout: '75%',
                     plugins: { 
-                        legend: { position: 'right', labels: { color: '#9ca3af', padding: 15, usePointStyle: true } },
+                        legend: { position: 'right', labels: { color: '#475569', padding: 15, usePointStyle: true } },
                         tooltip: { enabled: locKeys.length > 0 }
                     } 
                 }
