@@ -4,274 +4,307 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Private Dashboard | Sales & Revenue</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        /* Hide scrollbar for cleaner look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 flex min-h-screen">
-
-    <aside class="w-64 bg-slate-950 border-r border-slate-800 p-6 flex flex-col justify-between hidden md:flex">
-        <div>
-            <div class="flex items-center gap-3 mb-8">
-                <div class="bg-indigo-600 p-2 rounded-lg text-white">
-                    <i class="fa-solid fa-chart-pie text-xl"></i>
-                </div>
-                <span class="text-lg font-bold tracking-wider text-white">HQ_DASHBOARD</span>
-            </div>
-            
-            <nav class="space-y-2">
-                <a href="#" class="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg font-medium transition">
-                    <i class="fa-solid fa-house w-5"></i> Overview
-                </a>
-                <a href="#" class="flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-lg font-medium transition">
-                    <i class="fa-solid fa-clock w-5"></i> Inventory (Watches)
-                </a>
-                <a href="#" class="flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-lg font-medium transition">
-                    <i class="fa-solid fa-truck-fast w-5"></i> Shipping & Logistics
-                </a>
-                <a href="#" class="flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-lg font-medium transition">
-                    <i class="fa-solid fa-gears w-5"></i> Settings
-                </a>
-            </nav>
-        </div>
-        
-        <div class="border-t border-slate-800 pt-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-indigo-400">
-                AD
-            </div>
-            <div>
-                <p class="text-sm font-medium text-white">Admin Panel</p>
-                <p class="text-xs text-emerald-400 flex items-center gap-1">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Private Site
-                </p>
-            </div>
-        </div>
-    </aside>
 
     <main class="flex-1 p-6 md:p-10 overflow-y-auto">
         
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
             <div>
                 <h1 class="text-2xl md:text-3xl font-bold text-white">Sales & Revenue Overview</h1>
-                <p class="text-slate-400 text-sm mt-1">Real-time performance metrics for your watch store and assets.</p>
+                <p class="text-slate-400 text-sm mt-1 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Live & Auto-Saving to Local Device
+                </p>
             </div>
-            <div class="flex items-center gap-3 bg-slate-950 px-4 py-2 rounded-xl border border-slate-800 text-sm">
-                <i class="fa-regular fa-calendar text-indigo-400"></i>
-                <span class="font-medium text-slate-300">Jan 1, 2026 – Present</span>
+            
+            <div class="flex items-center gap-3 bg-slate-950 p-2 rounded-xl border border-slate-800">
+                <button onclick="exportBackup()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-medium px-4 py-2 rounded-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Backup Data
+                </button>
+                <div class="relative">
+                    <input type="file" id="importFile" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onchange="importBackup(event)">
+                    <button class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-4 py-2 rounded-lg transition border border-slate-700 flex items-center gap-2">
+                        <i class="fa-solid fa-upload"></i> Restore
+                    </button>
+                </div>
+                <button onclick="factoryReset()" class="bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-xs font-medium px-4 py-2 rounded-lg transition border border-rose-500/20">
+                    Reset
+                </button>
             </div>
         </header>
 
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Total Revenue</p>
-                        <h3 class="text-3xl font-bold text-white mt-2">$48,250.00</h3>
-                    </div>
-                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-xl">
-                        <i class="fa-solid fa-dollar-sign text-xl"></i>
-                    </div>
-                </div>
-                <p class="text-xs text-emerald-400 mt-4 flex items-center gap-1">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +12.5% <span class="text-slate-500">vs last month</span>
-                </p>
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Total Revenue</p>
+                <h3 class="text-3xl font-bold text-white mt-2" id="kpi-revenue">$0.00</h3>
             </div>
-
-            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Total Orders</p>
-                        <h3 class="text-3xl font-bold text-white mt-2">1,248</h3>
-                    </div>
-                    <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-xl">
-                        <i class="fa-solid fa-box text-xl"></i>
-                    </div>
-                </div>
-                <p class="text-xs text-indigo-400 mt-4 flex items-center gap-1">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +8.2% <span class="text-slate-500">vs last month</span>
-                </p>
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Total Orders</p>
+                <h3 class="text-3xl font-bold text-white mt-2" id="kpi-orders">0</h3>
             </div>
-
-            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Watches Sold</p>
-                        <h3 class="text-3xl font-bold text-white mt-2">312</h3>
-                    </div>
-                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-xl">
-                        <i class="fa-solid fa-clock text-xl"></i>
-                    </div>
-                </div>
-                <p class="text-xs text-amber-400 mt-4 flex items-center gap-1">
-                    <i class="fa-solid fa-arrow-trend-up"></i> 25% <span class="text-slate-500">of overall inventory sold</span>
-                </p>
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Watches Sold</p>
+                <h3 class="text-3xl font-bold text-white mt-2" id="kpi-sold">0</h3>
             </div>
-
-            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Avg. Order Value</p>
-                        <h3 class="text-3xl font-bold text-white mt-2">$154.60</h3>
-                    </div>
-                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-xl">
-                        <i class="fa-solid fa-hand-holding-dollar text-xl"></i>
-                    </div>
-                </div>
-                <p class="text-xs text-rose-400 mt-4 flex items-center gap-1">
-                    <i class="fa-solid fa-arrow-trend-up"></i> +2.1% <span class="text-slate-500">optimization rate</span>
-                </p>
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Avg. Order Value</p>
+                <h3 class="text-3xl font-bold text-white mt-2" id="kpi-aov">$0.00</h3>
             </div>
         </section>
 
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 lg:col-span-2">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-base font-semibold text-white">Monthly Revenue Breakdown</h4>
-                    <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded">Line Graph</span>
-                </div>
-                <div class="h-64">
-                    <canvas id="revenueChart"></canvas>
-                </div>
+                <h4 class="text-base font-semibold text-white mb-4">Revenue Trend</h4>
+                <div class="h-64"><canvas id="revenueChart"></canvas></div>
             </div>
-
             <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
-                <div class="flex justify-between items-center mb-4">
-                    <h4 class="text-base font-semibold text-white">Top Shipping Locations</h4>
-                    <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded">Geographic Split</span>
-                </div>
-                <div class="h-64 flex justify-center items-center">
-                    <canvas id="shippingChart"></canvas>
-                </div>
+                <h4 class="text-base font-semibold text-white mb-4">Top Locations</h4>
+                <div class="h-64 flex justify-center items-center"><canvas id="shippingChart"></canvas></div>
             </div>
         </section>
 
         <section class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
-            <div class="p-6 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h4 class="text-base font-semibold text-white">Recent Transactions & Shipped Destinations</h4>
-                    <p class="text-xs text-slate-400 mt-1">Live breakdown of individual global orders.</p>
-                </div>
-                <button class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-4 py-2 rounded-xl border border-slate-700 transition">
-                    <i class="fa-solid fa-download mr-1"></i> Export Data
+            <div class="p-6 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <h4 class="text-base font-semibold text-white">Recent Transactions</h4>
+                <button onclick="toggleModal('addOrderModal')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium px-4 py-2 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Add New Order
                 </button>
             </div>
-            
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-900/50 border-b border-slate-800 text-slate-400 text-xs font-semibold uppercase tracking-wider">
                             <th class="p-4">Order ID</th>
                             <th class="p-4">Product Name</th>
-                            <th class="p-4">Destination Shipped</th>
-                            <th class="p-4">Date</th>
+                            <th class="p-4">Destination</th>
                             <th class="p-4">Status</th>
                             <th class="p-4 text-right">Amount</th>
+                            <th class="p-4 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-slate-800/60 text-sm text-slate-300">
-                        <tr class="hover:bg-slate-900/40 transition">
-                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9482</td>
-                            <td class="p-4 font-medium text-white">Midnight Chronograph Watch</td>
-                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> New York, USA</td>
-                            <td class="p-4">May 28, 2026</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Delivered</span></td>
-                            <td class="p-4 text-right font-semibold text-white">$249.00</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/40 transition">
-                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9481</td>
-                            <td class="p-4 font-medium text-white">Rose Gold Minimalist Watch</td>
-                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> London, UK</td>
-                            <td class="p-4">May 27, 2026</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20">In Transit</span></td>
-                            <td class="p-4 text-right font-semibold text-white">$189.00</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/40 transition">
-                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9480</td>
-                            <td class="p-4 font-medium text-white">Classic Leather Strap Edition</td>
-                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Tokyo, Japan</td>
-                            <td class="p-4">May 25, 2026</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Delivered</span></td>
-                            <td class="p-4 text-right font-semibold text-white">$310.00</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/40 transition">
-                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9479</td>
-                            <td class="p-4 font-medium text-white">Titanium Diver Premium</td>
-                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Berlin, Germany</td>
-                            <td class="p-4">May 24, 2026</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-rose-500/10 text-rose-400 rounded-full border border-rose-500/20">Cancelled</span></td>
-                            <td class="p-4 text-right font-semibold text-white">$550.00</td>
-                        </tr>
-                        <tr class="hover:bg-slate-900/40 transition">
-                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9478</td>
-                            <td class="p-4 font-medium text-white">Smart Watch Sync Gen-X</td>
-                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Toronto, Canada</td>
-                            <td class="p-4">May 22, 2026</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Delivered</span></td>
-                            <td class="p-4 text-right font-semibold text-white">$199.00</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="ordersTableBody" class="divide-y divide-slate-800/60 text-sm text-slate-300">
+                        </tbody>
                 </table>
             </div>
         </section>
-
     </main>
 
+    <div id="addOrderModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex justify-center items-center z-50">
+        <div class="bg-slate-900 border border-slate-700 p-8 rounded-2xl w-full max-w-md shadow-2xl">
+            <h2 class="text-xl font-bold text-white mb-6">Record New Sale</h2>
+            <form id="orderForm" onsubmit="addOrder(event)">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Product Name</label>
+                        <input type="text" id="productInput" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Amount ($)</label>
+                            <input type="number" id="amountInput" step="0.01" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs text-slate-400 mb-1">Destination</label>
+                            <input type="text" id="destInput" required placeholder="e.g. USA" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-400 mb-1">Status</label>
+                        <select id="statusInput" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-2 text-white focus:outline-none focus:border-indigo-500">
+                            <option value="Delivered">Delivered</option>
+                            <option value="In Transit">In Transit</option>
+                            <option value="Processing">Processing</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-8 flex gap-3 justify-end">
+                    <button type="button" onclick="toggleModal('addOrderModal')" class="px-4 py-2 text-sm text-slate-400 hover:text-white transition">Cancel</button>
+                    <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition">Save Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
-        // Setup configuration parameters for dark theme charts
+        // 1. Initial/Default Data Structure
+        const defaultData = {
+            revenue: 48250,
+            ordersCount: 1248,
+            watchesSold: 312,
+            chartData: [8200, 12400, 11100, 18500, 22400, 28250], // Jan - Jun
+            locations: { 'USA': 45, 'UK': 20, 'Japan': 15, 'Germany': 12, 'Canada': 8 },
+            orders: [
+                { id: 'ORD-9482', product: 'Midnight Chronograph', dest: 'New York, USA', status: 'Delivered', amount: 249.00 },
+                { id: 'ORD-9481', product: 'Rose Gold Minimalist', dest: 'London, UK', status: 'In Transit', amount: 189.00 }
+            ]
+        };
+
+        // 2. Load Data from Local Storage (Auto-Save system)
+        let appData = JSON.parse(localStorage.getItem('hqDashboardData')) || defaultData;
+        let revChartInstance = null;
+        let shipChartInstance = null;
+
+        // 3. Main Render Function (Updates HTML based on data)
+        function renderDashboard() {
+            // Calculate AOV dynamically
+            const aov = appData.ordersCount > 0 ? (appData.revenue / appData.ordersCount).toFixed(2) : "0.00";
+
+            // Update KPIs
+            document.getElementById('kpi-revenue').innerText = '$' + appData.revenue.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('kpi-orders').innerText = appData.ordersCount.toLocaleString();
+            document.getElementById('kpi-sold').innerText = appData.watchesSold.toLocaleString();
+            document.getElementById('kpi-kpi-aov', aov);
+            document.getElementById('kpi-aov').innerText = '$' + aov;
+
+            // Update Table
+            const tableBody = document.getElementById('ordersTableBody');
+            tableBody.innerHTML = '';
+            appData.orders.forEach((order, index) => {
+                let statusColor = order.status === 'Delivered' ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20' : 
+                                  order.status === 'In Transit' ? 'text-amber-400 bg-amber-500/10 border-amber-500/20' : 
+                                  'text-indigo-400 bg-indigo-500/10 border-indigo-500/20';
+
+                tableBody.innerHTML += `
+                    <tr class="hover:bg-slate-900/40 transition">
+                        <td class="p-4 font-mono text-xs text-indigo-400">#${order.id}</td>
+                        <td class="p-4 font-medium text-white">${order.product}</td>
+                        <td class="p-4">${order.dest}</td>
+                        <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium rounded-full border ${statusColor}">${order.status}</span></td>
+                        <td class="p-4 text-right font-semibold text-white">$${order.amount.toFixed(2)}</td>
+                        <td class="p-4 text-center">
+                            <button onclick="deleteOrder(${index})" class="text-slate-500 hover:text-rose-500 transition"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            // Update Charts
+            renderCharts();
+            
+            // AUTO-SAVE to browser
+            localStorage.setItem('hqDashboardData', JSON.stringify(appData));
+        }
+
+        // 4. Add New Order Logic
+        function addOrder(e) {
+            e.preventDefault();
+            const product = document.getElementById('productInput').value;
+            const amount = parseFloat(document.getElementById('amountInput').value);
+            const dest = document.getElementById('destInput').value;
+            const status = document.getElementById('statusInput').value;
+            
+            const newId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+
+            // Update global data state
+            appData.orders.unshift({ id: newId, product, dest, status, amount });
+            appData.revenue += amount;
+            appData.ordersCount += 1;
+            appData.watchesSold += 1;
+            
+            // Add a slight bump to the latest chart month to simulate real-time graph movement
+            appData.chartData[appData.chartData.length - 1] += amount;
+
+            // Save and re-render
+            toggleModal('addOrderModal');
+            document.getElementById('orderForm').reset();
+            renderDashboard();
+        }
+
+        // 5. Delete Order
+        function deleteOrder(index) {
+            if(confirm('Delete this record?')) {
+                const order = appData.orders[index];
+                appData.revenue -= order.amount;
+                appData.ordersCount -= 1;
+                appData.watchesSold -= 1;
+                appData.orders.splice(index, 1);
+                renderDashboard();
+            }
+        }
+
+        // 6. BACKUP: Export Data to JSON File
+        function exportBackup() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
+            const downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href", dataStr);
+            downloadAnchorNode.setAttribute("download", "dashboard_backup_" + new Date().toISOString().split('T')[0] + ".json");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+
+        // 7. RESTORE: Import Data from JSON File
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if(importedData && importedData.revenue !== undefined) {
+                        appData = importedData;
+                        renderDashboard();
+                        alert('Backup Restored Successfully!');
+                    } else { alert('Invalid backup file format.'); }
+                } catch (err) { alert('Error reading file.'); }
+            };
+            reader.readAsText(file);
+        }
+
+        function factoryReset() {
+            if(confirm('WARNING: This will wipe all current data and restore defaults. Are you sure?')) {
+                appData = JSON.parse(JSON.stringify(defaultData)); // Deep copy default
+                renderDashboard();
+            }
+        }
+
+        // Utility: Modal Toggle
+        function toggleModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.toggle('hidden');
+        }
+
+        // Chart Initialization
         Chart.defaults.color = '#94a3b8';
         Chart.defaults.borderColor = '#334155';
 
-        // 1. Revenue Chart Logic
-        const revCtx = document.getElementById('revenueChart').getContext('2d');
-        new Chart(revCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                datasets: [{
-                    label: 'Gross Sales ($)',
-                    data: [8200, 12400, 11100, 18500, 22400, 28250],
-                    borderColor: '#6366f1',
-                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: { grid: { color: '#1e293b' }, ticks: { callback: value => '$' + value } },
-                    x: { grid: { display: false } }
-                }
-            }
-        });
+        function renderCharts() {
+            if(revChartInstance) revChartInstance.destroy();
+            if(shipChartInstance) shipChartInstance.destroy();
 
-        // 2. Shipping Locations Chart Logic
-        const shipCtx = document.getElementById('shippingChart').getContext('2d');
-        new Chart(shipCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['United States', 'United Kingdom', 'Japan', 'Germany', 'Canada'],
-                datasets: [{
-                    data: [45, 20, 15, 12, 8],
-                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4'],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { position: 'bottom', labels: { padding: 15, boxWidth: 12 } }
-                }
-            }
-        });
+            revChartInstance = new Chart(document.getElementById('revenueChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{ label: 'Gross Sales ($)', data: appData.chartData, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.1)', borderWidth: 3, fill: true, tension: 0.3 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#1e293b' } }, x: { grid: { display: false } } } }
+            });
+
+            shipChartInstance = new Chart(document.getElementById('shippingChart').getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(appData.locations),
+                    datasets: [{ data: Object.values(appData.locations), backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4'], borderWidth: 0 }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { padding: 15, boxWidth: 12 } } } }
+            });
+        }
+
+        // Boot up
+        window.onload = renderDashboard;
     </script>
 </body>
 </html>
