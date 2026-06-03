@@ -3,176 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horology Vault | Niche & Mechanical Timepieces</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Private Dashboard | Sales & Revenue</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght=0,400;0,600;1,400&family=Inter:wght=300;400;500&display=swap');
-        .font-serif { font-family: 'Cormorant Garamond', serif; }
-        .font-sans { font-family: 'Inter', sans-serif; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body class="bg-[#0b0c10] text-[#c5c6c7] font-sans antialiased">
+<body class="bg-slate-900 text-slate-100 flex min-h-screen">
 
-    <header class="border-b border-gray-800 bg-[#0b0c10]/90 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <a href="#" class="font-serif text-2xl tracking-widest text-white font-bold">
-                HOROLOGY <span class="text-amber-500">VAULT</span>
-            </a>
-            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-wider font-medium">
-                <a href="#collection" class="text-white hover:text-amber-400 transition">Curated Collection</a>
-                <a href="#" class="hover:text-amber-400 transition">Our Philosophy</a>
-                <a href="#" class="hover:text-amber-400 transition">Sourcing</a>
-            </nav>
-            <div class="flex items-center space-x-4">
-                <button onclick="openInquiry('General Collection Sourcing')" class="text-sm border border-amber-500/30 text-amber-400 px-4 py-2 hover:bg-amber-500 hover:text-black transition duration-300">
-                    Inquire
-                </button>
+    <aside class="w-64 bg-slate-950 border-r border-slate-800 p-6 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="flex items-center gap-3 mb-8">
+                <div class="bg-indigo-600 p-2 rounded-lg text-white">
+                    <i class="fa-solid fa-chart-pie text-xl"></i>
+                </div>
+                <span class="text-lg font-bold tracking-wider text-white">HQ_DASHBOARD</span>
             </div>
-        </div>
-    </header>
-
-    <section class="relative py-24 bg-gradient-to-b from-[#0b0c10] to-[#12141c] overflow-hidden">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-            <div>
-                <span class="text-xs font-semibold tracking-widest text-amber-500 uppercase block mb-3">Mechanical & Vintage Only</span>
-                <h1 class="font-serif text-5xl md:text-6xl text-white font-medium leading-tight mb-6">
-                    Preserving the soul of traditional <span class="italic text-amber-200">watchmaking</span>.
-                </h1>
-                <p class="text-gray-400 text-lg mb-8 max-w-lg leading-relaxed">
-                    We skip the screens, the batteries, and the software updates. Discover micro-brands, independent master horologists, and rare investment-grade vintage pieces.
-                </p>
-                <a href="#collection" class="inline-block bg-amber-500 text-black font-semibold text-sm uppercase tracking-wider px-8 py-4 hover:bg-amber-400 transition duration-300 shadow-lg shadow-amber-500/10">
-                    Explore Vault
+            
+            <nav class="space-y-2">
+                <a href="#" class="flex items-center gap-3 bg-indigo-600 text-white px-4 py-3 rounded-lg font-medium transition">
+                    <i class="fa-solid fa-house w-5"></i> Overview
                 </a>
+                <a href="#" class="flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-lg font-medium transition">
+                    <i class="fa-solid fa-clock w-5"></i> Inventory (Watches)
+                </a>
+                <a href="#" class="flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-lg font-medium transition">
+                    <i class="fa-solid fa-truck-fast w-5"></i> Shipping & Logistics
+                </a>
+                <a href="#" class="flex items-center gap-3 text-slate-400 hover:bg-slate-800 hover:text-white px-4 py-3 rounded-lg font-medium transition">
+                    <i class="fa-solid fa-gears w-5"></i> Settings
+                </a>
+            </nav>
+        </div>
+        
+        <div class="border-t border-slate-800 pt-4 flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-indigo-400">
+                AD
             </div>
-            <div class="relative bg-gray-900 border border-gray-800 p-8 rounded-sm aspect-square flex flex-col justify-center items-center text-center cursor-pointer group" onclick="openInquiry('Rolex Submariner Ref. 5513')">
-                <p class="text-amber-500 font-serif text-xl italic mb-2">[ Featured Piece ]</p>
-                <p class="text-white text-2xl font-light tracking-wide uppercase group-hover:text-amber-400 transition">Rolex Submariner Ref. 5513</p>
-                <p class="text-gray-500 text-xs mt-2 uppercase tracking-widest">Circa 1970 • Patina Dial</p>
-                <span class="text-xs text-amber-400 mt-6 underline opacity-0 group-hover:opacity-100 transition duration-300">Click to Inquire</span>
+            <div>
+                <p class="text-sm font-medium text-white">Admin Panel</p>
+                <p class="text-xs text-emerald-400 flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Private Site
+                </p>
             </div>
         </div>
-    </section>
+    </aside>
 
-    <section id="collection" class="py-24 max-w-7xl mx-auto px-6">
-        <div class="mb-12">
-            <h2 class="font-serif text-3xl md:text-4xl text-white font-medium">The Current Vault</h2>
-            <p class="text-gray-500 mt-2">Every piece is hand-selected, verified, and mechanically timed.</p>
-        </div>
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-bold text-white">Sales & Revenue Overview</h1>
+                <p class="text-slate-400 text-sm mt-1">Real-time performance metrics for your watch store and assets.</p>
+            </div>
+            <div class="flex items-center gap-3 bg-slate-950 px-4 py-2 rounded-xl border border-slate-800 text-sm">
+                <i class="fa-regular fa-calendar text-indigo-400"></i>
+                <span class="font-medium text-slate-300">Jan 1, 2026 – Present</span>
+            </div>
+        </header>
 
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            
-            <div class="group border border-gray-900 bg-[#12141c] p-5 hover:border-gray-700 transition duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="bg-gray-950 aspect-[4/3] w-full mb-6 flex items-center justify-center border border-gray-900">
-                        <span class="text-gray-600 text-xs tracking-widest uppercase">Product Image</span>
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Total Revenue</p>
+                        <h3 class="text-3xl font-bold text-white mt-2">$48,250.00</h3>
                     </div>
-                    <span class="text-xs text-amber-500 uppercase tracking-widest font-medium">Rolex</span>
-                    <h3 class="text-white text-xl font-medium mt-1 group-hover:text-amber-400 transition">Oyster Perpetual 36</h3>
-                    <p class="text-gray-500 text-sm mt-2">Rare "Stella" variant dial, automatic calibre 3230 movement with 70-hour power reserve.</p>
+                    <div class="bg-emerald-500/10 text-emerald-400 p-3 rounded-xl">
+                        <i class="fa-solid fa-dollar-sign text-xl"></i>
+                    </div>
                 </div>
-                <div class="mt-6 pt-4 border-t border-gray-900 flex justify-between items-center">
-                    <span class="text-white font-medium tracking-wide">$9,400</span>
-                    <button onclick="openInquiry('Rolex Oyster Perpetual 36')" class="text-xs uppercase tracking-wider text-amber-400 border border-amber-400/20 px-3 py-1.5 hover:bg-amber-400 hover:text-black transition">Inquire</button>
+                <p class="text-xs text-emerald-400 mt-4 flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-trend-up"></i> +12.5% <span class="text-slate-500">vs last month</span>
+                </p>
+            </div>
+
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Total Orders</p>
+                        <h3 class="text-3xl font-bold text-white mt-2">1,248</h3>
+                    </div>
+                    <div class="bg-indigo-500/10 text-indigo-400 p-3 rounded-xl">
+                        <i class="fa-solid fa-box text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-indigo-400 mt-4 flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-trend-up"></i> +8.2% <span class="text-slate-500">vs last month</span>
+                </p>
+            </div>
+
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Watches Sold</p>
+                        <h3 class="text-3xl font-bold text-white mt-2">312</h3>
+                    </div>
+                    <div class="bg-amber-500/10 text-amber-400 p-3 rounded-xl">
+                        <i class="fa-solid fa-clock text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-amber-400 mt-4 flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-trend-up"></i> 25% <span class="text-slate-500">of overall inventory sold</span>
+                </p>
+            </div>
+
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden group">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400 uppercase tracking-wider">Avg. Order Value</p>
+                        <h3 class="text-3xl font-bold text-white mt-2">$154.60</h3>
+                    </div>
+                    <div class="bg-rose-500/10 text-rose-400 p-3 rounded-xl">
+                        <i class="fa-solid fa-hand-holding-dollar text-xl"></i>
+                    </div>
+                </div>
+                <p class="text-xs text-rose-400 mt-4 flex items-center gap-1">
+                    <i class="fa-solid fa-arrow-trend-up"></i> +2.1% <span class="text-slate-500">optimization rate</span>
+                </p>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800 lg:col-span-2">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-base font-semibold text-white">Monthly Revenue Breakdown</h4>
+                    <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded">Line Graph</span>
+                </div>
+                <div class="h-64">
+                    <canvas id="revenueChart"></canvas>
                 </div>
             </div>
 
-            <div class="group border border-gray-900 bg-[#12141c] p-5 hover:border-gray-700 transition duration-300 flex flex-col justify-between">
-                <div>
-                    <div class="bg-gray-950 aspect-[4/3] w-full mb-6 flex items-center justify-center border border-gray-900">
-                        <span class="text-gray-600 text-xs tracking-widest uppercase">Product Image</span>
-                    </div>
-                    <span class="text-xs text-amber-500 uppercase tracking-widest font-medium">Anordain</span>
-                    <h3 class="text-white text-xl font-medium mt-1 group-hover:text-amber-400 transition">Model 1 Vitreous Enamel</h3>
-                    <p class="text-gray-500 text-sm mt-2">Niche Scottish independent brand. Handmade stunning blue enamel dial, manual-wind movement.</p>
+            <div class="bg-slate-950 p-6 rounded-2xl border border-slate-800">
+                <div class="flex justify-between items-center mb-4">
+                    <h4 class="text-base font-semibold text-white">Top Shipping Locations</h4>
+                    <span class="text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded">Geographic Split</span>
                 </div>
-                <div class="mt-6 pt-4 border-t border-gray-900 flex justify-between items-center">
-                    <span class="text-white font-medium tracking-wide">$4,200</span>
-                    <button onclick="openInquiry('Anordain Model 1 Enamel')" class="text-xs uppercase tracking-wider text-amber-400 border border-amber-400/20 px-3 py-1.5 hover:bg-amber-400 hover:text-black transition">Inquire</button>
+                <div class="h-64 flex justify-center items-center">
+                    <canvas id="shippingChart"></canvas>
                 </div>
             </div>
+        </section>
 
-            <div class="group border border-gray-900 bg-[#12141c] p-5 hover:border-gray-700 transition duration-300 flex flex-col justify-between">
+        <section class="bg-slate-950 rounded-2xl border border-slate-800 overflow-hidden">
+            <div class="p-6 border-b border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <div class="bg-gray-950 aspect-[4/3] w-full mb-6 flex items-center justify-center border border-gray-900">
-                        <span class="text-gray-600 text-xs tracking-widest uppercase">Product Image</span>
-                    </div>
-                    <span class="text-xs text-amber-500 uppercase tracking-widest font-medium">Tudor</span>
-                    <h3 class="text-white text-xl font-medium mt-1 group-hover:text-amber-400 transition">Black Bay 58 'Navy Blue'</h3>
-                    <p class="text-gray-500 text-sm mt-2">Classic vintage-inspired dimensions, manufacture automatic MT5402 chronometer calibre.</p>
+                    <h4 class="text-base font-semibold text-white">Recent Transactions & Shipped Destinations</h4>
+                    <p class="text-xs text-slate-400 mt-1">Live breakdown of individual global orders.</p>
                 </div>
-                <div class="mt-6 pt-4 border-t border-gray-900 flex justify-between items-center">
-                    <span class="text-white font-medium tracking-wide">$3,900</span>
-                    <button onclick="openInquiry('Tudor Black Bay 58')" class="text-xs uppercase tracking-wider text-amber-400 border border-amber-400/20 px-3 py-1.5 hover:bg-amber-400 hover:text-black transition">Inquire</button>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <div id="inquiryModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#12141c] border border-gray-800 p-8 max-w-md w-full mx-4 relative">
-            <button onclick="closeInquiry()" class="absolute top-4 right-4 text-gray-500 hover:text-white text-xl">&times;</button>
-            
-            <h3 class="font-serif text-2xl text-white mb-2">Secure an Inquiry</h3>
-            <p class="text-sm text-gray-400 mb-6">You are inquiring about: <span id="modalWatchName" class="text-amber-400 font-medium"></span></p>
-            
-            <form id="inquiryForm" class="space-y-4" onsubmit="handleFormSubmit(event)">
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Your Name</label>
-                    <input type="text" required class="w-full bg-gray-950 border border-gray-800 p-2.5 text-white focus:outline-none focus:border-amber-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Email Address</label>
-                    <input type="email" required class="w-full bg-gray-950 border border-gray-800 p-2.5 text-white focus:outline-none focus:border-amber-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs uppercase tracking-wider text-gray-400 mb-1">Message / Specific Questions</label>
-                    <textarea rows="3" class="w-full bg-gray-950 border border-gray-800 p-2.5 text-white focus:outline-none focus:border-amber-500 text-sm" placeholder="Ask about condition, box/papers, or shipping options..."></textarea>
-                </div>
-                <button type="submit" class="w-full bg-amber-500 text-black font-semibold text-xs uppercase tracking-widest py-3 hover:bg-amber-400 transition">
-                    Submit Private Request
+                <button class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-4 py-2 rounded-xl border border-slate-700 transition">
+                    <i class="fa-solid fa-download mr-1"></i> Export Data
                 </button>
-            </form>
-        </div>
-    </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900/50 border-b border-slate-800 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                            <th class="p-4">Order ID</th>
+                            <th class="p-4">Product Name</th>
+                            <th class="p-4">Destination Shipped</th>
+                            <th class="p-4">Date</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4 text-right">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60 text-sm text-slate-300">
+                        <tr class="hover:bg-slate-900/40 transition">
+                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9482</td>
+                            <td class="p-4 font-medium text-white">Midnight Chronograph Watch</td>
+                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> New York, USA</td>
+                            <td class="p-4">May 28, 2026</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Delivered</span></td>
+                            <td class="p-4 text-right font-semibold text-white">$249.00</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40 transition">
+                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9481</td>
+                            <td class="p-4 font-medium text-white">Rose Gold Minimalist Watch</td>
+                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> London, UK</td>
+                            <td class="p-4">May 27, 2026</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-amber-500/10 text-amber-400 rounded-full border border-amber-500/20">In Transit</span></td>
+                            <td class="p-4 text-right font-semibold text-white">$189.00</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40 transition">
+                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9480</td>
+                            <td class="p-4 font-medium text-white">Classic Leather Strap Edition</td>
+                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Tokyo, Japan</td>
+                            <td class="p-4">May 25, 2026</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Delivered</span></td>
+                            <td class="p-4 text-right font-semibold text-white">$310.00</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40 transition">
+                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9479</td>
+                            <td class="p-4 font-medium text-white">Titanium Diver Premium</td>
+                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Berlin, Germany</td>
+                            <td class="p-4">May 24, 2026</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-rose-500/10 text-rose-400 rounded-full border border-rose-500/20">Cancelled</span></td>
+                            <td class="p-4 text-right font-semibold text-white">$550.00</td>
+                        </tr>
+                        <tr class="hover:bg-slate-900/40 transition">
+                            <td class="p-4 font-mono text-xs text-indigo-400">#ORD-9478</td>
+                            <td class="p-4 font-medium text-white">Smart Watch Sync Gen-X</td>
+                            <td class="p-4"><i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> Toronto, Canada</td>
+                            <td class="p-4">May 22, 2026</td>
+                            <td class="p-4"><span class="px-2.5 py-1 text-xs font-medium bg-emerald-500/10 text-emerald-400 rounded-full border border-emerald-500/20">Delivered</span></td>
+                            <td class="p-4 text-right font-semibold text-white">$199.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
 
-    <footer class="border-t border-gray-900 py-12 text-center text-xs text-gray-600 tracking-wider uppercase">
-        <p>&copy; 2026 Horology Vault. Built for collectors of fine mechanical objects.</p>
-    </footer>
+    </main>
 
     <script>
-        const modal = document.getElementById('inquiryModal');
-        const modalWatchName = document.getElementById('modalWatchName');
+        // Setup configuration parameters for dark theme charts
+        Chart.defaults.color = '#94a3b8';
+        Chart.defaults.borderColor = '#334155';
 
-        function openInquiry(watchName) {
-            modalWatchName.textContent = watchName;
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-            }, 10);
-        }
-
-        function closeInquiry() {
-            modal.classList.add('opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
-        }
-
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            alert(`Thank you! Your inquiry for the "${modalWatchName.textContent}" has been simulated. We will connect this to a real backend email system next!`);
-            closeInquiry();
-            document.getElementById('inquiryForm').reset();
-        }
-
-        // Close modal if user clicks outside the form box
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeInquiry();
+        // 1. Revenue Chart Logic
+        const revCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revCtx, {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                datasets: [{
+                    label: 'Gross Sales ($)',
+                    data: [8200, 12400, 11100, 18500, 22400, 28250],
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { grid: { color: '#1e293b' }, ticks: { callback: value => '$' + value } },
+                    x: { grid: { display: false } }
+                }
             }
-        }
+        });
+
+        // 2. Shipping Locations Chart Logic
+        const shipCtx = document.getElementById('shippingChart').getContext('2d');
+        new Chart(shipCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['United States', 'United Kingdom', 'Japan', 'Germany', 'Canada'],
+                datasets: [{
+                    data: [45, 20, 15, 12, 8],
+                    backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#f43f5e', '#06b6d4'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 15, boxWidth: 12 } }
+                }
+            }
+        });
     </script>
 </body>
 </html>
