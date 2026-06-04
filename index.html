@@ -13,8 +13,8 @@
         
         body { 
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, sans-serif;
-            background-color: #f4f6f8; /* Shopify Admin Background */
-            color: #202223; /* Polaris Text Color */
+            background-color: #f4f6f8; 
+            color: #202223; 
         }
 
         /* Subtle scrollbars */
@@ -35,26 +35,45 @@
             border: 1px solid #c9cccf;
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
             border-radius: 4px;
+            transition: all 0.2s ease;
         }
         .polaris-input:focus {
             outline: none;
             border-color: #008060;
             box-shadow: 0 0 0 2px rgba(0, 128, 96, 0.2);
         }
+
+        /* --- POLARIS ENTRANCE ANIMATIONS --- */
+        @keyframes fadeSlideUp {
+            0% { opacity: 0; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            opacity: 0; /* Hidden initially */
+            animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-100 { animation-delay: 100ms; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-300 { animation-delay: 300ms; }
+        .delay-400 { animation-delay: 400ms; }
+        
+        /* Smooth row highlighting */
+        .table-row-hover:hover {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 <body class="flex min-h-screen antialiased selection:bg-[#bae0ff] selection:text-[#005499]">
 
     <!-- MAIN DASHBOARD CONTENT -->
-    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
+    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full overflow-hidden">
         
         <!-- TOP NAVIGATION & ACTIONS -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+        <header class="animate-fade-in flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
                 <h1 class="text-[20px] font-bold text-[#202223]">Dashboard</h1>
             </div>
             
-            <!-- Secondary Actions -->
             <div class="flex items-center gap-2">
                 <button onclick="exportBackup()" class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
                     <i class="fa-solid fa-download text-[#6d7175]"></i> Export
@@ -78,66 +97,97 @@
         </header>
 
         <!-- KPI PERFORMANCE GRID -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div class="polaris-card p-4">
-                <div class="flex items-center gap-2 mb-2">
-                    <p class="text-[13px] font-medium text-[#6d7175]">Total sales</p>
-                    <i class="fa-solid fa-circle-info text-[#babec3] text-[10px]"></i>
+        <section class="animate-fade-in delay-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <!-- Total Sales -->
+            <div class="polaris-card p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-2">
+                    <div class="flex items-center gap-2">
+                        <p class="text-[13px] font-medium text-[#6d7175] border-b border-dashed border-[#8c9196] cursor-help" title="Total revenue before deductions">Total sales</p>
+                    </div>
+                    <span class="text-[#008060] text-[12px] font-medium flex items-center gap-1 bg-[#e3f1df] px-1.5 py-0.5 rounded"><i class="fa-solid fa-arrow-trend-up"></i> 12%</span>
                 </div>
                 <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-revenue">$0.00</h3>
             </div>
-            <div class="polaris-card p-4">
-                <p class="text-[13px] font-medium text-[#6d7175] mb-2">Total orders</p>
+            
+            <!-- Store Sessions (Traffic) -->
+            <div class="polaris-card p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-[13px] font-medium text-[#6d7175]">Store sessions</p>
+                    <span class="text-[#008060] text-[12px] font-medium flex items-center gap-1 bg-[#e3f1df] px-1.5 py-0.5 rounded"><i class="fa-solid fa-arrow-trend-up"></i> 8%</span>
+                </div>
+                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-sessions">0</h3>
+            </div>
+
+            <!-- Total Orders -->
+            <div class="polaris-card p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-[13px] font-medium text-[#6d7175]">Total orders</p>
+                    <span class="text-[#6d7175] text-[12px] font-medium flex items-center gap-1 bg-[#f4f6f8] px-1.5 py-0.5 rounded"><i class="fa-solid fa-minus"></i> 0%</span>
+                </div>
                 <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-orders">0</h3>
             </div>
-            <div class="polaris-card p-4">
-                <p class="text-[13px] font-medium text-[#6d7175] mb-2">Items sold</p>
-                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-sold">0</h3>
-            </div>
-            <div class="polaris-card p-4">
-                <p class="text-[13px] font-medium text-[#6d7175] mb-2">Average order value</p>
-                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-aov">$0.00</h3>
+
+            <!-- Conversion Rate -->
+            <div class="polaris-card p-4 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-2">
+                    <p class="text-[13px] font-medium text-[#6d7175] border-b border-dashed border-[#8c9196] cursor-help" title="Percentage of sessions that resulted in an order">Conversion rate</p>
+                    <span class="text-[#d82c0d] text-[12px] font-medium flex items-center gap-1 bg-[#fed3d1] px-1.5 py-0.5 rounded"><i class="fa-solid fa-arrow-trend-down"></i> 1.2%</span>
+                </div>
+                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-conversion">0.00%</h3>
             </div>
         </section>
 
         <!-- DATA VISUALIZATION SECTION -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+        <section class="animate-fade-in delay-200 grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
             <div class="polaris-card p-5 lg:col-span-2 flex flex-col">
                 <h4 class="text-[14px] font-semibold text-[#202223] mb-4">Sales over time</h4>
-                <div class="flex-1 min-h-[250px]"><canvas id="revenueChart"></canvas></div>
+                <div class="flex-1 min-h-[250px] relative"><canvas id="revenueChart"></canvas></div>
             </div>
 
             <div class="polaris-card p-5 flex flex-col">
                 <h4 class="text-[14px] font-semibold text-[#202223] mb-4">Sales by location</h4>
-                <div class="flex-1 min-h-[250px] flex justify-center items-center"><canvas id="shippingChart"></canvas></div>
+                <div class="flex-1 min-h-[250px] flex justify-center items-center relative"><canvas id="shippingChart"></canvas></div>
             </div>
         </section>
 
-        <!-- INVENTORY SECTION -->
-        <section class="polaris-card overflow-hidden mb-6">
-            <div class="px-5 py-4 border-b border-[#e1e3e5]">
-                <h4 class="text-[14px] font-semibold text-[#202223]">Inventory</h4>
+        <!-- INVENTORY & TOP PRODUCTS SECTION -->
+        <section class="animate-fade-in delay-300 grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <!-- Full Inventory Table -->
+            <div class="polaris-card overflow-hidden lg:col-span-2">
+                <div class="px-5 py-4 border-b border-[#e1e3e5]">
+                    <h4 class="text-[14px] font-semibold text-[#202223]">Inventory</h4>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-[#f4f6f8] border-b border-[#e1e3e5] text-[#202223] text-[12px] font-semibold">
+                                <th class="px-5 py-2.5 w-1/4">SKU</th>
+                                <th class="px-5 py-2.5">Product</th>
+                                <th class="px-5 py-2.5">Price</th>
+                                <th class="px-5 py-2.5">Available</th>
+                                <th class="px-5 py-2.5">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventoryTableBody" class="divide-y divide-[#e1e3e5] text-[13px] text-[#202223]">
+                            <!-- Dynamically filled -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-[#f4f6f8] border-b border-[#e1e3e5] text-[#202223] text-[12px] font-semibold">
-                            <th class="px-5 py-2.5 w-1/4">SKU</th>
-                            <th class="px-5 py-2.5">Product</th>
-                            <th class="px-5 py-2.5">Price</th>
-                            <th class="px-5 py-2.5">Available</th>
-                            <th class="px-5 py-2.5">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inventoryTableBody" class="divide-y divide-[#e1e3e5] text-[13px] text-[#202223]">
-                        <!-- Dynamically filled -->
-                    </tbody>
-                </table>
+
+            <!-- Top Products Widget -->
+            <div class="polaris-card overflow-hidden flex flex-col">
+                <div class="px-5 py-4 border-b border-[#e1e3e5]">
+                    <h4 class="text-[14px] font-semibold text-[#202223]">Top performing products</h4>
+                </div>
+                <div class="p-5 flex-1 flex flex-col gap-4" id="topProductsList">
+                    <!-- Dynamically filled -->
+                </div>
             </div>
         </section>
 
         <!-- RECENT ORDERS SECTION -->
-        <section class="polaris-card overflow-hidden">
+        <section class="animate-fade-in delay-400 polaris-card overflow-hidden">
             <div class="px-5 py-4 border-b border-[#e1e3e5] flex justify-between items-center">
                 <h4 class="text-[14px] font-semibold text-[#202223]">Recent orders</h4>
             </div>
@@ -162,11 +212,11 @@
     </main>
 
     <!-- CREATE ORDER MODAL -->
-    <div id="addOrderModal" class="fixed inset-0 bg-[#202223]/50 backdrop-blur-[1px] hidden flex justify-center items-center z-50 p-4">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl flex flex-col max-h-[90vh]">
+    <div id="addOrderModal" class="fixed inset-0 bg-[#202223]/50 backdrop-blur-[2px] hidden flex justify-center items-center z-50 p-4 transition-opacity">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl flex flex-col max-h-[90vh] animate-fade-in">
             <div class="px-5 py-4 border-b border-[#e1e3e5] flex justify-between items-center">
                 <h2 class="text-[16px] font-semibold text-[#202223]">Create order</h2>
-                <button onclick="closeModal('addOrderModal')" class="text-[#6d7175] hover:text-[#202223] transition-colors">
+                <button onclick="closeModal('addOrderModal')" class="text-[#6d7175] hover:text-[#202223] transition-colors rounded-full p-1 hover:bg-[#f4f6f8]">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -232,43 +282,74 @@
         const defaultData = {
             revenue: 0,
             ordersCount: 0,
-            watchesSold: 0,
+            sessions: 142, // Mock baseline traffic
             chartData: [0, 0, 0, 0, 0, 0], 
             locations: {}, 
             orders: [],
             inventory: [
-                { id: 'SKU-OB-01', name: 'Obsidian Chronograph', stock: 25, price: 349.00 },
-                { id: 'SKU-VG-02', name: 'Vanguard Emerald Edition', stock: 12, price: 420.00 },
-                { id: 'SKU-SN-03', name: 'Stealth Noir Minimalist', stock: 40, price: 195.00 },
-                { id: 'SKU-AQ-04', name: 'Aqua-Dive Pro Automatic', stock: 8, price: 650.00 },
-                { id: 'SKU-CL-05', name: 'Classic Leather Heritage', stock: 18, price: 280.00 }
+                { id: 'SKU-OB-01', name: 'Obsidian Chronograph', stock: 25, price: 349.00, timesSold: 0 },
+                { id: 'SKU-VG-02', name: 'Vanguard Emerald Edition', stock: 12, price: 420.00, timesSold: 0 },
+                { id: 'SKU-SN-03', name: 'Stealth Noir Minimalist', stock: 40, price: 195.00, timesSold: 0 },
+                { id: 'SKU-AQ-04', name: 'Aqua-Dive Pro Automatic', stock: 8, price: 650.00, timesSold: 0 },
+                { id: 'SKU-CL-05', name: 'Classic Leather Heritage', stock: 18, price: 280.00, timesSold: 0 }
             ]
         };
 
         let appData = JSON.parse(localStorage.getItem('shopifyCloneData')) || defaultData;
+        
+        // Data migration check for newly added fields (like timesSold and sessions)
+        if(appData.sessions === undefined) appData.sessions = appData.ordersCount * 15 + 142;
+        appData.inventory.forEach(i => { if(i.timesSold === undefined) i.timesSold = 0; });
+
         let revChartInstance = null;
         let shipChartInstance = null;
 
         function renderDashboard() {
-            const aov = appData.ordersCount > 0 ? (appData.revenue / appData.ordersCount).toFixed(2) : "0.00";
+            // Calculated Tracking Metrics
+            const convRate = appData.sessions > 0 ? ((appData.ordersCount / appData.sessions) * 100).toFixed(2) : "0.00";
 
             // KPI Sync
             document.getElementById('kpi-revenue').innerText = '$' + appData.revenue.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('kpi-orders').innerText = appData.ordersCount.toLocaleString();
-            document.getElementById('kpi-sold').innerText = appData.watchesSold.toLocaleString();
-            document.getElementById('kpi-aov').innerText = '$' + aov;
+            document.getElementById('kpi-sessions').innerText = appData.sessions.toLocaleString();
+            document.getElementById('kpi-conversion').innerText = convRate + '%';
+
+            // Top Products Tracker Widget
+            const topProductsContainer = document.getElementById('topProductsList');
+            topProductsContainer.innerHTML = '';
+            
+            // Sort by most sold, get top 3
+            const topProducts = [...appData.inventory].sort((a, b) => b.timesSold - a.timesSold).slice(0, 3);
+            
+            if(appData.ordersCount === 0) {
+                topProductsContainer.innerHTML = `<p class="text-[#6d7175] text-[13px] text-center mt-4">Make a sale to see top products</p>`;
+            } else {
+                topProducts.forEach(item => {
+                    const revenueGenerated = item.timesSold * item.price;
+                    topProductsContainer.innerHTML += `
+                        <div class="flex justify-between items-center bg-[#f4f6f8] p-3 rounded border border-[#e1e3e5] hover:bg-[#ebeef0] transition-colors cursor-default">
+                            <div>
+                                <p class="text-[13px] font-semibold text-[#202223] mb-0.5 truncate w-[160px]" title="${item.name}">${item.name}</p>
+                                <p class="text-[12px] text-[#6d7175]">${item.timesSold} sales</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-[13px] font-medium text-[#202223]">$${revenueGenerated.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
 
             // Inventory Table
             const invTable = document.getElementById('inventoryTableBody');
             invTable.innerHTML = '';
             appData.inventory.forEach(item => {
-                // Shopify Status Badges
                 let stockStatus = item.stock > 10 ? '<span class="bg-[#aee9d1] text-[#006e52] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Active</span>' : 
                                   item.stock > 0 ? '<span class="bg-[#ffea8a] text-[#8a6116] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Low stock</span>' : 
                                   '<span class="bg-[#fed3d1] text-[#8c2626] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Out of stock</span>';
                 
                 invTable.innerHTML += `
-                    <tr class="hover:bg-[#f8f9fa] transition-colors cursor-default">
+                    <tr class="table-row-hover transition-colors cursor-default">
                         <td class="px-5 py-3 text-[#6d7175] font-mono text-[12px]">${item.id}</td>
                         <td class="px-5 py-3 font-medium text-[#202223] hover:underline cursor-pointer">${item.name}</td>
                         <td class="px-5 py-3">$${item.price.toFixed(2)}</td>
@@ -290,14 +371,14 @@
                                       '<span class="bg-[#e4e5e7] text-[#42474c] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Unfulfilled</span>';
 
                     orderTable.innerHTML += `
-                        <tr class="hover:bg-[#f8f9fa] transition-colors">
+                        <tr class="table-row-hover transition-colors">
                             <td class="px-5 py-3 font-semibold text-[#202223] hover:underline cursor-pointer">#${order.id}</td>
                             <td class="px-5 py-3 text-[#6d7175]">${order.date || 'Today'}</td>
                             <td class="px-5 py-3">${order.clientName}</td>
                             <td class="px-5 py-3">${statusBadge}</td>
                             <td class="px-5 py-3 font-medium">$${order.amount.toFixed(2)}</td>
                             <td class="px-5 py-3 text-center">
-                                <button onclick="deleteOrder(${index})" class="text-[#6d7175] hover:text-[#d82c0d] p-1 transition-colors" title="Delete order">
+                                <button onclick="deleteOrder(${index})" class="text-[#6d7175] hover:text-[#d82c0d] p-1 rounded hover:bg-[#fed3d1] transition-colors" title="Delete order">
                                     <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </td>
@@ -346,15 +427,18 @@
             const status = document.getElementById('statusInput').value;
             const newId = Math.floor(1000 + Math.random() * 9000);
             
-            // Generate standard date format
             const dateObj = new Date();
             const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
             appData.orders.unshift({ id: newId, date: dateStr, product: productObj.name, skuId, clientName, clientContact, dest, status, amount });
+            
+            // Update tracking metrics
             appData.revenue += amount;
             appData.ordersCount += 1;
-            appData.watchesSold += 1;
+            appData.sessions += Math.floor(Math.random() * 5) + 1; // Fake organic traffic spike per order
+            
             productObj.stock -= 1; 
+            productObj.timesSold += 1; // Used for Top Products widget
             
             let country = dest.split(',').pop().trim();
             if(!country) country = "Other";
@@ -372,10 +456,12 @@
                 
                 appData.revenue -= order.amount;
                 appData.ordersCount -= 1;
-                appData.watchesSold -= 1;
                 
                 const productObj = appData.inventory.find(i => i.id === order.skuId);
-                if(productObj) productObj.stock += 1;
+                if(productObj) {
+                    productObj.stock += 1;
+                    productObj.timesSold = Math.max(0, productObj.timesSold - 1);
+                }
 
                 let country = order.dest.split(',').pop().trim() || "Other";
                 if(appData.locations[country]) {
@@ -441,8 +527,11 @@
             if(revChartInstance) revChartInstance.destroy();
             if(shipChartInstance) shipChartInstance.destroy();
 
-            // Shopify Bar/Line hybrid style
-            revChartInstance = new Chart(document.getElementById('revenueChart').getContext('2d'), {
+            // Setup chart canvas to correctly size based on container
+            const revCanvas = document.getElementById('revenueChart');
+            const shipCanvas = document.getElementById('shippingChart');
+
+            revChartInstance = new Chart(revCanvas.getContext('2d'), {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -453,47 +542,57 @@
                         backgroundColor: 'rgba(0, 128, 96, 0.05)', 
                         borderWidth: 2, 
                         fill: true, 
-                        tension: 0.1,
+                        tension: 0.3, /* Smoothed line for Polaris look */
                         pointBackgroundColor: '#008060',
                         pointBorderColor: '#ffffff',
                         pointBorderWidth: 2,
                         pointRadius: 4,
+                        pointHoverRadius: 6
                     }]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    plugins: { legend: { display: false } }, 
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: { backgroundColor: '#202223', padding: 10, cornerRadius: 4 }
+                    }, 
                     scales: { 
                         y: { grid: { color: '#f4f6f8', drawBorder: false }, beginAtZero: true, border: {display: false} }, 
                         x: { grid: { display: false }, border: {display: false} } 
-                    } 
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
                 }
             });
 
-            // Doughnut Locations Chart
             const locKeys = Object.keys(appData.locations);
             const locValues = Object.values(appData.locations);
             
             const chartLabels = locKeys.length > 0 ? locKeys : ['No data'];
             const chartData = locValues.length > 0 ? locValues : [1];
-            // Soft Shopify-esque reporting colors
             const chartColors = locValues.length > 0 ? ['#5c6ac4', '#47c1bf', '#008060', '#f49342', '#ba79c4'] : ['#e1e3e5'];
 
-            shipChartInstance = new Chart(document.getElementById('shippingChart').getContext('2d'), {
+            shipChartInstance = new Chart(shipCanvas.getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: chartLabels,
-                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2, borderColor: '#ffffff' }]
+                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2, borderColor: '#ffffff', hoverOffset: 4 }]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    cutout: '70%',
+                    cutout: '72%',
                     plugins: { 
-                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } },
-                        tooltip: { enabled: locKeys.length > 0 }
-                    } 
+                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 20 } },
+                        tooltip: { enabled: locKeys.length > 0, backgroundColor: '#202223' }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
                 }
             });
         }
