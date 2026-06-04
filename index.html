@@ -3,221 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Private Dashboard | Command Center</title>
+    <title>Dashboard - Shopify Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+        /* Standardizing system fonts to match Shopify's native feel */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
         body { 
-            font-family: 'Inter', sans-serif; 
-            /* Merges background.png with a gorgeous bright glass-tint mask */
-            background: linear-gradient(rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.95)), url('background.png') no-repeat center center fixed;
-            background-size: cover;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, sans-serif;
+            background-color: #f4f6f8; /* Shopify Admin Background */
+            color: #202223; /* Polaris Text Color */
         }
 
-        /* Webkit scrollbar stylings for light theme */
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* Subtle scrollbars */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #babec3; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c9196; }
+
+        /* Shopify Card Shadow */
+        .polaris-card {
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(63, 63, 68, 0.15);
+        }
+
+        /* Shopify Inputs */
+        .polaris-input {
+            border: 1px solid #c9cccf;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        .polaris-input:focus {
+            outline: none;
+            border-color: #008060;
+            box-shadow: 0 0 0 2px rgba(0, 128, 96, 0.2);
+        }
     </style>
 </head>
-<body class="text-slate-800 flex min-h-screen selection:bg-emerald-200 selection:text-emerald-900 antialiased">
+<body class="flex min-h-screen antialiased selection:bg-[#bae0ff] selection:text-[#005499]">
 
-    <!-- MAIN DASHBOARD CONTENT CONTAINER -->
-    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full">
         
-        <!-- TOP NAVIGATION CONTROL PANEL -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 pb-6 border-b border-slate-200">
+        <!-- TOP NAVIGATION & ACTIONS -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div>
-                <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">Command Center</h1>
-                <p class="text-emerald-600 text-sm mt-1 flex items-center gap-2 font-medium tracking-wide">
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping absolute opacity-75"></span>
-                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 relative shadow-[0_0_8px_rgba(16,185,129,0.6)]"></span>
-                    Live Data Engine Active
-                </p>
+                <h1 class="text-[20px] font-bold text-[#202223]">Dashboard</h1>
             </div>
             
-            <!-- CORE BACKUP & RESTORE UTILITIES -->
-            <div class="flex items-center gap-3 bg-white/80 backdrop-blur-xl p-2.5 rounded-xl border border-slate-200 shadow-sm">
-                <!-- Backup Button -->
-                <button onclick="exportBackup()" class="transform transition-all duration-200 hover:scale-105 active:scale-95 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-2.5 rounded-lg border border-emerald-200 flex items-center gap-2 tracking-wide cursor-pointer shadow-sm">
-                    <i class="fa-solid fa-cloud-arrow-down text-sm"></i> Backup Data
+            <!-- Secondary Actions -->
+            <div class="flex items-center gap-2">
+                <button onclick="exportBackup()" class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-download text-[#6d7175]"></i> Export
                 </button>
                 
-                <!-- Restore Trigger -->
                 <div class="relative group">
                     <input type="file" id="importFile" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="importBackup(event)">
-                    <button class="transform transition-all duration-200 group-hover:scale-105 active:scale-95 bg-white hover:bg-slate-50 text-slate-600 group-hover:text-slate-900 text-xs font-bold px-4 py-2.5 rounded-lg border border-slate-200 flex items-center gap-2 tracking-wide shadow-sm">
-                        <i class="fa-solid fa-cloud-arrow-up text-sm text-emerald-500"></i> Restore
+                    <button class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
+                        <i class="fa-solid fa-upload text-[#6d7175]"></i> Import
                     </button>
                 </div>
 
-                <!-- Wipe Utility -->
-                <button onclick="factoryReset()" class="transform transition-all duration-200 hover:bg-rose-50 active:scale-95 bg-white text-rose-500 hover:text-rose-600 text-xs font-bold px-4 py-2.5 rounded-lg border border-rose-100 tracking-wide cursor-pointer shadow-sm">
+                <button onclick="factoryReset()" class="bg-white hover:bg-[#fff4f4] text-[#d82c0d] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors">
                     Reset
+                </button>
+
+                <button onclick="openOrderModal()" class="ml-2 bg-[#008060] hover:bg-[#006e52] text-white text-[13px] font-medium px-4 py-1.5 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
+                    Create order
                 </button>
             </div>
         </header>
 
         <!-- KPI PERFORMANCE GRID -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-emerald-100 relative overflow-hidden shadow-lg shadow-emerald-900/5">
-                <p class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Total Revenue</p>
-                <h3 class="text-3xl font-black text-emerald-600 mt-2 tracking-tight" id="kpi-revenue">$0.00</h3>
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="polaris-card p-4">
+                <div class="flex items-center gap-2 mb-2">
+                    <p class="text-[13px] font-medium text-[#6d7175]">Total sales</p>
+                    <i class="fa-solid fa-circle-info text-[#babec3] text-[10px]"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-revenue">$0.00</h3>
             </div>
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50">
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Total Orders</p>
-                <h3 class="text-3xl font-black text-slate-800 mt-2 tracking-tight" id="kpi-orders">0</h3>
+            <div class="polaris-card p-4">
+                <p class="text-[13px] font-medium text-[#6d7175] mb-2">Total orders</p>
+                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-orders">0</h3>
             </div>
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50">
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Watches Sold</p>
-                <h3 class="text-3xl font-black text-slate-800 mt-2 tracking-tight" id="kpi-sold">0</h3>
+            <div class="polaris-card p-4">
+                <p class="text-[13px] font-medium text-[#6d7175] mb-2">Items sold</p>
+                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-sold">0</h3>
             </div>
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 shadow-lg shadow-slate-200/50">
-                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Avg. Order Value</p>
-                <h3 class="text-3xl font-black text-slate-800 mt-2 tracking-tight" id="kpi-aov">$0.00</h3>
+            <div class="polaris-card p-4">
+                <p class="text-[13px] font-medium text-[#6d7175] mb-2">Average order value</p>
+                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-aov">$0.00</h3>
             </div>
         </section>
 
         <!-- DATA VISUALIZATION SECTION -->
-        <section class="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-8">
-            <!-- Revenue Trajectory Chart -->
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 xl:col-span-2 flex flex-col shadow-lg shadow-slate-200/50">
-                <h4 class="text-base font-bold text-slate-800 mb-4 tracking-wide">Revenue Trajectory</h4>
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <div class="polaris-card p-5 lg:col-span-2 flex flex-col">
+                <h4 class="text-[14px] font-semibold text-[#202223] mb-4">Sales over time</h4>
                 <div class="flex-1 min-h-[250px]"><canvas id="revenueChart"></canvas></div>
             </div>
 
-            <!-- Shipping Geographic Mix Chart -->
-            <div class="bg-white/90 backdrop-blur-md p-6 rounded-2xl border border-slate-200 flex flex-col shadow-lg shadow-slate-200/50">
-                <h4 class="text-base font-bold text-slate-800 mb-4 tracking-wide">Global Destinations</h4>
+            <div class="polaris-card p-5 flex flex-col">
+                <h4 class="text-[14px] font-semibold text-[#202223] mb-4">Sales by location</h4>
                 <div class="flex-1 min-h-[250px] flex justify-center items-center"><canvas id="shippingChart"></canvas></div>
             </div>
         </section>
 
-        <!-- STOCK INDEX INVENTORY TRACKER -->
-        <section class="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200 overflow-hidden mb-8 shadow-lg shadow-slate-200/50">
-            <div class="p-6 border-b border-slate-100 bg-slate-50/50">
-                <h4 class="text-base font-bold text-slate-800 tracking-wide">Stock Management Inventory</h4>
-                <p class="text-xs text-slate-500 mt-1">Live stock index tracker. Creating sales adjusts your baseline automatically.</p>
+        <!-- INVENTORY SECTION -->
+        <section class="polaris-card overflow-hidden mb-6">
+            <div class="px-5 py-4 border-b border-[#e1e3e5]">
+                <h4 class="text-[14px] font-semibold text-[#202223]">Inventory</h4>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-emerald-700 text-xs font-bold uppercase tracking-widest">
-                            <th class="p-4">SKU Code</th>
-                            <th class="p-4">Model Blueprint</th>
-                            <th class="p-4">Retail Price</th>
-                            <th class="p-4">Stock Level</th>
-                            <th class="p-4">Availability</th>
+                        <tr class="bg-[#f4f6f8] border-b border-[#e1e3e5] text-[#202223] text-[12px] font-semibold">
+                            <th class="px-5 py-2.5 w-1/4">SKU</th>
+                            <th class="px-5 py-2.5">Product</th>
+                            <th class="px-5 py-2.5">Price</th>
+                            <th class="px-5 py-2.5">Available</th>
+                            <th class="px-5 py-2.5">Status</th>
                         </tr>
                     </thead>
-                    <tbody id="inventoryTableBody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Filled by script dynamically -->
+                    <tbody id="inventoryTableBody" class="divide-y divide-[#e1e3e5] text-[13px] text-[#202223]">
+                        <!-- Dynamically filled -->
                     </tbody>
                 </table>
             </div>
         </section>
 
-        <!-- DETAILED TRANSACTION ENGINE LOGS -->
-        <section class="bg-white/90 backdrop-blur-md rounded-2xl border border-slate-200 overflow-hidden shadow-lg shadow-slate-200/50">
-            <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h4 class="text-base font-bold text-slate-800 tracking-wide">Customer Log Transmissions</h4>
-                    <p class="text-xs text-slate-500 mt-1">Detailed secure storage history for global fulfillment.</p>
-                </div>
-                
-                <!-- Premium Animated Record Button -->
-                <button onclick="openOrderModal()" class="transform transition-all duration-300 hover:scale-105 active:scale-95 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold px-6 py-3 rounded-xl flex items-center gap-2 cursor-pointer shadow-[0_4px_14px_0_rgba(16,185,129,0.39)] hover:shadow-[0_6px_20px_rgba(16,185,129,0.23)] border border-emerald-400">
-                    <i class="fa-solid fa-circle-plus text-base"></i> Record Sale
-                </button>
+        <!-- RECENT ORDERS SECTION -->
+        <section class="polaris-card overflow-hidden">
+            <div class="px-5 py-4 border-b border-[#e1e3e5] flex justify-between items-center">
+                <h4 class="text-[14px] font-semibold text-[#202223]">Recent orders</h4>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
-                        <tr class="bg-slate-50 border-b border-slate-200 text-emerald-700 text-xs font-bold uppercase tracking-widest">
-                            <th class="p-4">Order Ref</th>
-                            <th class="p-4">Client Information</th>
-                            <th class="p-4">Watch Profile</th>
-                            <th class="p-4">Destination Shipped</th>
-                            <th class="p-4">Status</th>
-                            <th class="p-4 text-right">Revenue</th>
-                            <th class="p-4 text-center">Fulfillment</th>
+                        <tr class="bg-[#f4f6f8] border-b border-[#e1e3e5] text-[#202223] text-[12px] font-semibold">
+                            <th class="px-5 py-2.5">Order</th>
+                            <th class="px-5 py-2.5">Date</th>
+                            <th class="px-5 py-2.5">Customer</th>
+                            <th class="px-5 py-2.5">Fulfillment status</th>
+                            <th class="px-5 py-2.5">Total</th>
+                            <th class="px-5 py-2.5 text-center">Action</th>
                         </tr>
                     </thead>
-                    <tbody id="ordersTableBody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Filled by script dynamically -->
+                    <tbody id="ordersTableBody" class="divide-y divide-[#e1e3e5] text-[13px] text-[#202223]">
+                        <!-- Dynamically filled -->
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <!-- ACCOUNT TRANSACTION CREATION MODAL -->
-    <div id="addOrderModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4 overflow-y-auto">
-        <div class="bg-white border border-slate-200 p-6 md:p-8 rounded-2xl w-full max-w-2xl shadow-2xl transition-all my-auto">
-            <h2 class="text-xl font-black text-slate-800 tracking-wide">Log New Financial Record</h2>
-            <p class="text-xs text-slate-500 mb-6">File client details. Database engines adapt quantities synchronously.</p>
+    <!-- CREATE ORDER MODAL -->
+    <div id="addOrderModal" class="fixed inset-0 bg-[#202223]/50 backdrop-blur-[1px] hidden flex justify-center items-center z-50 p-4">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl flex flex-col max-h-[90vh]">
+            <div class="px-5 py-4 border-b border-[#e1e3e5] flex justify-between items-center">
+                <h2 class="text-[16px] font-semibold text-[#202223]">Create order</h2>
+                <button onclick="closeModal('addOrderModal')" class="text-[#6d7175] hover:text-[#202223] transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
             
-            <form id="orderForm" onsubmit="addOrder(event)">
-                <!-- Step 1: Client Metadata -->
-                <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl mb-6 shadow-sm">
-                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-user-shield mr-2 opacity-70"></i> 1. Client Identity</h3>
+            <form id="orderForm" onsubmit="addOrder(event)" class="overflow-y-auto p-5">
+                
+                <div class="mb-6">
+                    <h3 class="text-[13px] font-semibold text-[#202223] mb-3">Customer</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs text-slate-600 mb-1 font-bold">Full Name</label>
-                            <input type="text" id="clientName" required placeholder="Johnathan Doe" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-slate-400 transition">
+                            <label class="block text-[13px] text-[#202223] mb-1">First and last name</label>
+                            <input type="text" id="clientName" required class="polaris-input w-full px-3 py-2 text-[13px]">
                         </div>
                         <div>
-                            <label class="block text-xs text-slate-600 mb-1 font-bold">Contact Method (Email/Phone)</label>
-                            <input type="text" id="clientContact" placeholder="+1 (555) 019-2831" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-slate-400 transition">
+                            <label class="block text-[13px] text-[#202223] mb-1">Email or phone</label>
+                            <input type="text" id="clientContact" class="polaris-input w-full px-3 py-2 text-[13px]">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-xs text-slate-600 mb-1 font-bold">Target Destination (City, Country)</label>
-                            <input type="text" id="clientDest" required placeholder="Paris, France" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 placeholder-slate-400 transition">
+                            <label class="block text-[13px] text-[#202223] mb-1">Shipping address (City, Country)</label>
+                            <input type="text" id="clientDest" required placeholder="e.g. Paris, France" class="polaris-input w-full px-3 py-2 text-[13px]">
                         </div>
                     </div>
                 </div>
 
-                <!-- Step 2: Product Metrics -->
-                <div class="bg-slate-50 border border-slate-200 p-5 rounded-xl mb-6 shadow-sm">
-                    <h3 class="text-xs font-bold text-emerald-600 uppercase tracking-widest mb-4"><i class="fa-solid fa-box-open mr-2 opacity-70"></i> 2. Logistics & Ledger</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="md:col-span-2">
-                            <label class="block text-xs text-slate-600 mb-1 font-bold">Select Product From Vault</label>
-                            <select id="productSelect" required onchange="updateFormPrice()" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 cursor-pointer transition">
-                                <!-- Loaded dynamically via engine -->
+                <hr class="border-[#e1e3e5] mb-6">
+
+                <div>
+                    <h3 class="text-[13px] font-semibold text-[#202223] mb-3">Products</h3>
+                    <div class="grid grid-cols-1 gap-4">
+                        <div>
+                            <label class="block text-[13px] text-[#202223] mb-1">Search products</label>
+                            <select id="productSelect" required onchange="updateFormPrice()" class="polaris-input w-full px-3 py-2 text-[13px] bg-white cursor-pointer">
+                                <!-- Loaded dynamically -->
                             </select>
                         </div>
-                        <div>
-                            <label class="block text-xs text-slate-600 mb-1 font-bold">Agreed Execution Value ($)</label>
-                            <input type="number" id="amountInput" step="0.01" required class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs text-slate-600 mb-1 font-bold">Fulfillment Status</label>
-                            <select id="statusInput" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-2.5 text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 cursor-pointer transition">
-                                <option value="Processing">Processing</option>
-                                <option value="Shipped">Shipped</option>
-                                <option value="Delivered">Delivered</option>
-                            </select>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[13px] text-[#202223] mb-1">Price ($)</label>
+                                <input type="number" id="amountInput" step="0.01" required class="polaris-input w-full px-3 py-2 text-[13px]">
+                            </div>
+                            <div>
+                                <label class="block text-[13px] text-[#202223] mb-1">Status</label>
+                                <select id="statusInput" class="polaris-input w-full px-3 py-2 text-[13px] bg-white cursor-pointer">
+                                    <option value="Unfulfilled">Unfulfilled</option>
+                                    <option value="Fulfilled">Fulfilled</option>
+                                    <option value="Partially fulfilled">Partially fulfilled</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Footer Dynamic Action Bar -->
-                <div class="flex gap-3 justify-end items-center">
-                    <button type="button" onclick="closeModal('addOrderModal')" class="px-5 py-2.5 text-sm font-bold text-slate-500 hover:text-slate-800 transition">Abort</button>
-                    <button type="submit" class="transform transition-all duration-200 hover:scale-105 active:scale-95 px-6 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold rounded-xl tracking-wider shadow-[0_4px_14px_0_rgba(16,185,129,0.39)]">Commit Entry</button>
+                <div class="mt-8 flex gap-3 justify-end border-t border-[#e1e3e5] pt-4 -mx-5 px-5">
+                    <button type="button" onclick="closeModal('addOrderModal')" class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-4 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors">Cancel</button>
+                    <button type="submit" class="bg-[#008060] hover:bg-[#006e52] text-white text-[13px] font-medium px-4 py-1.5 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.05)] transition-colors">Save</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- ENGINE JAVASCRIPT EXECUTIONS -->
+    <!-- ENGINE JAVASCRIPT -->
     <script>
-        // 1. RAW SECURE DEFAULT SCHEMA
         const defaultData = {
             revenue: 0,
             ordersCount: 0,
@@ -234,65 +245,60 @@
             ]
         };
 
-        // 2. Initialize Internal Engine Instance
-        let appData = JSON.parse(localStorage.getItem('hqWhiteGreenData')) || defaultData;
+        let appData = JSON.parse(localStorage.getItem('shopifyCloneData')) || defaultData;
         let revChartInstance = null;
         let shipChartInstance = null;
 
-        // 3. UI Synchronization Render pipeline
         function renderDashboard() {
             const aov = appData.ordersCount > 0 ? (appData.revenue / appData.ordersCount).toFixed(2) : "0.00";
 
-            // Map Statistics
+            // KPI Sync
             document.getElementById('kpi-revenue').innerText = '$' + appData.revenue.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('kpi-orders').innerText = appData.ordersCount.toLocaleString();
             document.getElementById('kpi-sold').innerText = appData.watchesSold.toLocaleString();
             document.getElementById('kpi-aov').innerText = '$' + aov;
 
-            // Map Stock Records Table
+            // Inventory Table
             const invTable = document.getElementById('inventoryTableBody');
             invTable.innerHTML = '';
             appData.inventory.forEach(item => {
-                let stockStatus = item.stock > 10 ? '<span class="text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100 font-bold">Optimal</span>' : 
-                                  item.stock > 0 ? '<span class="text-amber-600 bg-amber-50 px-2 py-1 rounded border border-amber-100 font-bold">Critical</span>' : 
-                                  '<span class="text-rose-600 bg-rose-50 px-2 py-1 rounded border border-rose-100 font-black">Depleted</span>';
+                // Shopify Status Badges
+                let stockStatus = item.stock > 10 ? '<span class="bg-[#aee9d1] text-[#006e52] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Active</span>' : 
+                                  item.stock > 0 ? '<span class="bg-[#ffea8a] text-[#8a6116] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Low stock</span>' : 
+                                  '<span class="bg-[#fed3d1] text-[#8c2626] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Out of stock</span>';
                 
                 invTable.innerHTML += `
-                    <tr class="hover:bg-slate-50 transition duration-150">
-                        <td class="p-4 font-mono text-xs text-slate-500">${item.id}</td>
-                        <td class="p-4 font-bold text-slate-800">${item.name}</td>
-                        <td class="p-4 font-mono text-emerald-600 font-medium">$${item.price.toFixed(2)}</td>
-                        <td class="p-4 font-black ${item.stock <= 5 ? 'text-rose-500' : 'text-slate-800'}">${item.stock} Units</td>
-                        <td class="p-4 text-[10px] uppercase tracking-wider">${stockStatus}</td>
+                    <tr class="hover:bg-[#f8f9fa] transition-colors cursor-default">
+                        <td class="px-5 py-3 text-[#6d7175] font-mono text-[12px]">${item.id}</td>
+                        <td class="px-5 py-3 font-medium text-[#202223] hover:underline cursor-pointer">${item.name}</td>
+                        <td class="px-5 py-3">$${item.price.toFixed(2)}</td>
+                        <td class="px-5 py-3 ${item.stock <= 5 ? 'text-[#d82c0d] font-semibold' : ''}">${item.stock}</td>
+                        <td class="px-5 py-3">${stockStatus}</td>
                     </tr>
                 `;
             });
 
-            // Map Transactions Ledger Table
+            // Orders Table
             const orderTable = document.getElementById('ordersTableBody');
             orderTable.innerHTML = '';
             if (appData.orders.length === 0) {
-                orderTable.innerHTML = `<tr><td colspan="7" class="p-12 text-center text-slate-400 italic tracking-wider font-medium">No transaction pipelines logged in local buffer memory.</td></tr>`;
+                orderTable.innerHTML = `<tr><td colspan="6" class="px-5 py-8 text-center text-[#6d7175]">No orders found</td></tr>`;
             } else {
                 appData.orders.forEach((order, index) => {
-                    let statusColor = order.status === 'Delivered' ? 'text-emerald-700 border-emerald-200 bg-emerald-50' : 
-                                      order.status === 'Shipped' ? 'text-blue-700 border-blue-200 bg-blue-50' : 
-                                      'text-amber-700 border-amber-200 bg-amber-50';
+                    let statusBadge = order.status === 'Fulfilled' ? '<span class="bg-[#e3f1df] text-[#2c6e2f] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Fulfilled</span>' : 
+                                      order.status === 'Partially fulfilled' ? '<span class="bg-[#ffea8a] text-[#8a6116] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Partially fulfilled</span>' : 
+                                      '<span class="bg-[#e4e5e7] text-[#42474c] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Unfulfilled</span>';
 
                     orderTable.innerHTML += `
-                        <tr class="hover:bg-slate-50 transition duration-150">
-                            <td class="p-4 font-mono text-xs text-emerald-600 font-bold">#${order.id}</td>
-                            <td class="p-4">
-                                <p class="font-black text-slate-800">${order.clientName}</p>
-                                <p class="text-xs text-slate-500 font-mono">${order.clientContact || 'No Secondary Comm Vector'}</p>
-                            </td>
-                            <td class="p-4 text-slate-700 font-bold">${order.product}</td>
-                            <td class="p-4 text-slate-500 font-medium"><i class="fa-solid fa-location-arrow text-emerald-500 mr-2"></i>${order.dest}</td>
-                            <td class="p-4"><span class="px-2.5 py-1 text-[10px] font-black uppercase tracking-widest rounded border ${statusColor}">${order.status}</span></td>
-                            <td class="p-4 text-right font-black text-emerald-600 font-mono">$${order.amount.toFixed(2)}</td>
-                            <td class="p-4 text-center">
-                                <button onclick="deleteOrder(${index})" class="transform transition-all duration-150 hover:scale-110 active:scale-90 text-slate-400 hover:text-rose-500 p-2 cursor-pointer" title="Rollback Transaction">
-                                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                        <tr class="hover:bg-[#f8f9fa] transition-colors">
+                            <td class="px-5 py-3 font-semibold text-[#202223] hover:underline cursor-pointer">#${order.id}</td>
+                            <td class="px-5 py-3 text-[#6d7175]">${order.date || 'Today'}</td>
+                            <td class="px-5 py-3">${order.clientName}</td>
+                            <td class="px-5 py-3">${statusBadge}</td>
+                            <td class="px-5 py-3 font-medium">$${order.amount.toFixed(2)}</td>
+                            <td class="px-5 py-3 text-center">
+                                <button onclick="deleteOrder(${index})" class="text-[#6d7175] hover:text-[#d82c0d] p-1 transition-colors" title="Delete order">
+                                    <i class="fa-solid fa-trash-can"></i>
                                 </button>
                             </td>
                         </tr>
@@ -300,19 +306,16 @@
                 });
             }
 
-            // Sync visual monitoring canvas analytics
             renderCharts();
-            // Cache mirror data array natively
-            localStorage.setItem('hqWhiteGreenData', JSON.stringify(appData));
+            localStorage.setItem('shopifyCloneData', JSON.stringify(appData));
         }
 
-        // 4. Modal Visibility & Dropdown Controllers
         function openOrderModal() {
             const select = document.getElementById('productSelect');
-            select.innerHTML = '<option value="" disabled selected>Select hardware archetype...</option>';
+            select.innerHTML = '<option value="" disabled selected>Browse products...</option>';
             appData.inventory.forEach(item => {
                 if (item.stock > 0) {
-                    select.innerHTML += `<option value="${item.id}">${item.name} (Value: $${item.price}) — ${item.stock} Available</option>`;
+                    select.innerHTML += `<option value="${item.id}">${item.name} - $${item.price}</option>`;
                 }
             });
             document.getElementById('addOrderModal').classList.remove('hidden');
@@ -329,43 +332,42 @@
             if(product) document.getElementById('amountInput').value = product.price;
         }
 
-        // 5. Process and Write Incoming Transactions
         function addOrder(e) {
             e.preventDefault();
             const skuId = document.getElementById('productSelect').value;
             const productObj = appData.inventory.find(i => i.id === skuId);
             
-            if(!productObj) return alert("System rejected operation. Invalid hardware archetype selection.");
+            if(!productObj) return alert("Please select a valid product.");
 
             const amount = parseFloat(document.getElementById('amountInput').value);
             const clientName = document.getElementById('clientName').value;
             const clientContact = document.getElementById('clientContact').value;
             const dest = document.getElementById('clientDest').value;
             const status = document.getElementById('statusInput').value;
-            const newId = 'TXN-' + Math.floor(10000 + Math.random() * 90000);
+            const newId = Math.floor(1000 + Math.random() * 9000);
+            
+            // Generate standard date format
+            const dateObj = new Date();
+            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
-            // Mutation Sequence
-            appData.orders.unshift({ id: newId, product: productObj.name, skuId, clientName, clientContact, dest, status, amount });
+            appData.orders.unshift({ id: newId, date: dateStr, product: productObj.name, skuId, clientName, clientContact, dest, status, amount });
             appData.revenue += amount;
             appData.ordersCount += 1;
             appData.watchesSold += 1;
             productObj.stock -= 1; 
             
-            // Extract Geographic string structures
             let country = dest.split(',').pop().trim();
-            if(!country) country = "Other Hubs";
+            if(!country) country = "Other";
             appData.locations[country] = (appData.locations[country] || 0) + 1;
 
-            // Increment terminal matrix node
             appData.chartData[appData.chartData.length - 1] += amount;
 
             closeModal('addOrderModal');
             renderDashboard();
         }
 
-        // 6. Rollback / Erase Records
         function deleteOrder(index) {
-            if(confirm('Initiate critical log rollback? This re-stocks the unit and extracts funds from gross metrics.')) {
+            if(confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
                 const order = appData.orders[index];
                 
                 appData.revenue -= order.amount;
@@ -375,7 +377,7 @@
                 const productObj = appData.inventory.find(i => i.id === order.skuId);
                 if(productObj) productObj.stock += 1;
 
-                let country = order.dest.split(',').pop().trim() || "Other Hubs";
+                let country = order.dest.split(',').pop().trim() || "Other";
                 if(appData.locations[country]) {
                     appData.locations[country] -= 1;
                     if(appData.locations[country] <= 0) delete appData.locations[country];
@@ -387,7 +389,6 @@
             }
         }
 
-        // 7. DESKTOP EXPORT/IMPORT SYSTEM (Native File Processing Engine)
         function exportBackup() {
             const dataStr = JSON.stringify(appData, null, 4);
             const blob = new Blob([dataStr], { type: "application/json" });
@@ -395,11 +396,10 @@
             
             const downloadAnchorNode = document.createElement('a');
             downloadAnchorNode.setAttribute("href", blobUrl);
-            downloadAnchorNode.setAttribute("download", "HQ_Ledger_Backup_" + new Date().toISOString().split('T')[0] + ".json");
+            downloadAnchorNode.setAttribute("download", "shopify_export_" + new Date().toISOString().split('T')[0] + ".json");
             document.body.appendChild(downloadAnchorNode);
             
             downloadAnchorNode.click();
-            
             downloadAnchorNode.remove();
             URL.revokeObjectURL(blobUrl);
         }
@@ -412,53 +412,52 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    if(importedData && importedData.inventory !== undefined && importedData.orders !== undefined) {
+                    if(importedData && importedData.inventory && importedData.orders) {
                         appData = importedData;
                         renderDashboard();
-                        alert('System Restore Completed successfully. Active buffer synced.');
                     } else { 
-                        alert('Restore Aborted: The JSON format structure provided does not match requirements.'); 
+                        alert('Invalid Shopify export file.'); 
                     }
                 } catch (err) { 
-                    alert('Critical Parsing Error: Broken or unreadable backup sequence.'); 
+                    alert('Error reading file.'); 
                 }
             };
             reader.readAsText(file);
         }
 
         function factoryReset() {
-            if(confirm('Wipe core ledger data matrices? This actions an irreversible purge of the immediate device buffer.')) {
+            if(confirm('Clear all data and reset to default?')) {
                 appData = JSON.parse(JSON.stringify(defaultData)); 
                 renderDashboard();
             }
         }
 
-        // 8. DATA GRAPHING SCHEMATICS 
-        Chart.defaults.color = '#64748b'; // slate-500
+        // CHARTS CONFIGURATION
+        Chart.defaults.color = '#6d7175'; 
         Chart.defaults.font.family = 'Inter';
-        Chart.defaults.font.weight = '600';
+        Chart.defaults.font.size = 12;
 
         function renderCharts() {
             if(revChartInstance) revChartInstance.destroy();
             if(shipChartInstance) shipChartInstance.destroy();
 
-            // Line Logic Chart
+            // Shopify Bar/Line hybrid style
             revChartInstance = new Chart(document.getElementById('revenueChart').getContext('2d'), {
                 type: 'line',
                 data: {
-                    labels: ['Phase 1', 'Phase 2', 'Phase 3', 'Phase 4', 'Phase 5', 'Active Node'],
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                     datasets: [{ 
+                        label: 'Sales',
                         data: appData.chartData, 
-                        borderColor: '#10b981', 
-                        backgroundColor: 'rgba(16, 185, 129, 0.15)', 
-                        borderWidth: 3, 
+                        borderColor: '#008060', 
+                        backgroundColor: 'rgba(0, 128, 96, 0.05)', 
+                        borderWidth: 2, 
                         fill: true, 
-                        tension: 0.4,
-                        pointBackgroundColor: '#ffffff',
-                        pointBorderColor: '#10b981',
-                        pointBorderWidth: 3,
+                        tension: 0.1,
+                        pointBackgroundColor: '#008060',
+                        pointBorderColor: '#ffffff',
+                        pointBorderWidth: 2,
                         pointRadius: 4,
-                        pointHoverRadius: 6
                     }]
                 },
                 options: { 
@@ -466,8 +465,8 @@
                     maintainAspectRatio: false, 
                     plugins: { legend: { display: false } }, 
                     scales: { 
-                        y: { grid: { color: '#e2e8f0', drawBorder: false }, beginAtZero: true }, 
-                        x: { grid: { display: false }, drawBorder: false } 
+                        y: { grid: { color: '#f4f6f8', drawBorder: false }, beginAtZero: true, border: {display: false} }, 
+                        x: { grid: { display: false }, border: {display: false} } 
                     } 
                 }
             });
@@ -476,29 +475,29 @@
             const locKeys = Object.keys(appData.locations);
             const locValues = Object.values(appData.locations);
             
-            const chartLabels = locKeys.length > 0 ? locKeys : ['Awaiting Terminals'];
+            const chartLabels = locKeys.length > 0 ? locKeys : ['No data'];
             const chartData = locValues.length > 0 ? locValues : [1];
-            const chartColors = locValues.length > 0 ? ['#10b981', '#0ea5e9', '#f59e0b', '#8b5cf6', '#f43f5e'] : ['#e2e8f0'];
+            // Soft Shopify-esque reporting colors
+            const chartColors = locValues.length > 0 ? ['#5c6ac4', '#47c1bf', '#008060', '#f49342', '#ba79c4'] : ['#e1e3e5'];
 
             shipChartInstance = new Chart(document.getElementById('shippingChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: chartLabels,
-                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2, borderColor: '#ffffff', hoverOffset: 6 }]
+                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2, borderColor: '#ffffff' }]
                 },
                 options: { 
                     responsive: true, 
                     maintainAspectRatio: false, 
-                    cutout: '75%',
+                    cutout: '70%',
                     plugins: { 
-                        legend: { position: 'right', labels: { color: '#475569', padding: 15, usePointStyle: true } },
+                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } },
                         tooltip: { enabled: locKeys.length > 0 }
                     } 
                 }
             });
         }
 
-        // Initialize Engine Boot Sequence
         window.onload = renderDashboard;
     </script>
 </body>
