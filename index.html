@@ -136,7 +136,6 @@
 </head>
 <body class="antialiased selection:bg-[#008060]/20 selection:text-[#008060] overflow-hidden">
 
-    <!-- AUTHENTICATION GATE -->
     <div id="authOverlay">
         <div class="glass-card bg-white/80 p-8 w-full max-w-sm flex flex-col items-center shadow-2xl animate-fade-in border-t border-l border-white/80" id="loginCard">
             <div class="bg-gradient-to-tr from-[#008060] to-emerald-400 w-16 h-16 rounded-full flex items-center justify-center mb-5 shadow-lg">
@@ -156,7 +155,6 @@
         </div>
     </div>
 
-    <!-- WRAPPER TO APPLY BLUR EASILY -->
     <div id="secureContent" class="locked-blur">
         <div class="bg-mesh">
             <div class="blob blob-1"></div>
@@ -205,7 +203,15 @@
 
             <section class="animate-fade-in grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
                 <div class="glass-card p-6 lg:col-span-2 flex flex-col">
-                    <h4 class="text-[15px] font-semibold text-gray-800 mb-6">Revenue Over Time</h4>
+                    <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+                        <h4 class="text-[15px] font-semibold text-gray-800">Revenue Over Time</h4>
+                        <div class="flex bg-gray-200/60 p-0.5 rounded-lg text-[11px] font-semibold border border-gray-300/40 shadow-inner">
+                            <button onclick="changeTimeframe('1D')" id="btn-1D" class="px-2.5 py-1 rounded-md text-gray-600 transition-all duration-200">1 Day</button>
+                            <button onclick="changeTimeframe('7D')" id="btn-7D" class="px-2.5 py-1 rounded-md text-gray-600 transition-all duration-200">7 Days</button>
+                            <button onclick="changeTimeframe('1M')" id="btn-1M" class="px-2.5 py-1 rounded-md bg-white text-gray-800 shadow-sm transition-all duration-200">Monthly</button>
+                            <button onclick="changeTimeframe('1Y')" id="btn-1Y" class="px-2.5 py-1 rounded-md text-gray-600 transition-all duration-200">Yearly</button>
+                        </div>
+                    </div>
                     <div class="flex-1 min-h-[280px] relative"><canvas id="revenueChart"></canvas></div>
                 </div>
 
@@ -307,7 +313,6 @@
         </button>
     </div>
 
-    <!-- ADD ORDER MODAL -->
     <div id="addOrderModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4 transition-opacity">
         <div class="glass-card bg-white/95 w-full max-w-lg flex flex-col max-h-[90vh] shadow-2xl animate-fade-in border-0">
             <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
@@ -351,7 +356,6 @@
         </div>
     </div>
 
-    <!-- CRITICAL CORE UI & PASS GATE LAYER (RUNS INSTANTLY AND LOCALLY) -->
     <script>
         const MASTER_PASSWORD = "watzyykk";
 
@@ -369,14 +373,12 @@
             }
         }
 
-        // Native early storage lookup to verify sessions
         try {
             if (sessionStorage.getItem('dashboard_unlocked') === 'true') {
                 unlockInterface();
             }
         } catch(e) {}
 
-        // Handle submissions safely inside the primary DOM sequence
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.getElementById('loginForm');
             if(form) {
@@ -393,21 +395,19 @@
                         err.classList.remove('hidden');
                         document.getElementById('authPassword').value = '';
                         card.classList.remove('animate-shake');
-                        void card.offsetWidth; // force element recalculation
+                        void card.offsetWidth; 
                         card.classList.add('animate-shake');
                     }
                 });
             }
         });
 
-        // Basic clean UI controller access points
         window.closeModal = function(id) {
             document.getElementById(id).classList.add('hidden');
             if(id === 'addOrderModal') document.getElementById('orderForm').reset();
         };
     </script>
 
-    <!-- CLOUD SYNCHRONIZATION AND RENDER SYSTEM -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -446,6 +446,7 @@
         let appData = JSON.parse(JSON.stringify(defaultData));
         let revChartInstance = null;
         let shipChartInstance = null;
+        let currentTimeframe = '1M'; // Holds active time frame selection
 
         onValue(dataRef, (snapshot) => {
             const incomingCloudData = snapshot.val();
@@ -466,6 +467,24 @@
         function syncToCloud() {
             set(dataRef, appData);
         }
+
+        // Exposed globally to handle dynamic chart swapping
+        window.changeTimeframe = function(timeframe) {
+            currentTimeframe = timeframe;
+            ['1D', '7D', '1M', '1Y'].forEach(t => {
+                const btn = document.getElementById(`btn-${t}`);
+                if(btn) {
+                    if(t === timeframe) {
+                        btn.classList.add('bg-white', 'text-gray-800', 'shadow-sm');
+                        btn.classList.remove('text-gray-600');
+                    } else {
+                        btn.classList.remove('bg-white', 'text-gray-800', 'shadow-sm');
+                        btn.classList.add('text-gray-600');
+                    }
+                }
+            });
+            renderCharts();
+        };
 
         function renderDashboardUI() {
             let totalProfit = 0;
@@ -595,7 +614,10 @@
             const status = document.getElementById('statusInput').value;
             const newId = Math.floor(10000 + Math.random() * 90000);
             
-            appData.orders.unshift({ id: newId, product: productObj.name, skuId, clientName, dest, status, amount });
+            // Critical Addition: Network epoch timestamp added to every unique transaction item
+            const timestamp = Date.now();
+            
+            appData.orders.unshift({ id: newId, product: productObj.name, skuId, clientName, dest, status, amount, timestamp });
             
             appData.revenue += amount;
             appData.ordersCount += 1;
@@ -675,6 +697,7 @@
         Chart.defaults.color = '#6b7280';
         Chart.defaults.font.family = 'Inter';
 
+        // --- TIMEFRAME DATASHEET INTERPRETATION ENGINE ---
         function renderCharts() {
             if(revChartInstance) revChartInstance.destroy();
             if(shipChartInstance) shipChartInstance.destroy();
@@ -687,13 +710,78 @@
             gradient.addColorStop(0, 'rgba(0, 128, 96, 0.4)');
             gradient.addColorStop(1, 'rgba(0, 128, 96, 0.0)');
 
+            let labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+            let chartDataValues = [...appData.chartData];
+
+            const now = new Date();
+
+            if (currentTimeframe === '1D') {
+                labels = ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'];
+                chartDataValues = [0, 0, 0, 0, 0, 0];
+                const oneDayAgo = Date.now() - (24 * 60 * 60 * 1000);
+
+                appData.orders.forEach(o => {
+                    const orderTime = o.timestamp || Date.now();
+                    if(orderTime >= oneDayAgo) {
+                        const hr = new Date(orderTime).getHours();
+                        const targetBin = Math.min(5, Math.floor(hr / 4));
+                        chartDataValues[targetBin] += o.amount;
+                    }
+                });
+            } 
+            else if (currentTimeframe === '7D') {
+                const dayStrings = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                labels = [];
+                chartDataValues = [];
+                
+                for(let i = 6; i >= 0; i--) {
+                    const d = new Date();
+                    d.setDate(now.getDate() - i);
+                    labels.push(dayStrings[d.getDay()]);
+                    chartDataValues.push(0);
+                }
+
+                appData.orders.forEach(o => {
+                    const orderTime = o.timestamp || Date.now();
+                    const orderDate = new Date(orderTime);
+                    const diffDays = Math.floor((now - orderDate) / (1000 * 60 * 60 * 24));
+                    if(diffDays < 7 && diffDays >= 0) {
+                        const dayLabel = dayStrings[orderDate.getDay()];
+                        const matchingIdx = labels.indexOf(dayLabel);
+                        if(matchingIdx !== -1) chartDataValues[matchingIdx] += o.amount;
+                    }
+                });
+            } 
+            else if (currentTimeframe === '1Y') {
+                const currentYr = now.getFullYear();
+                labels = [String(currentYr - 4), String(currentYr - 3), String(currentYr - 2), String(currentYr - 1), String(currentYr)];
+                chartDataValues = [0, 0, 0, 0, 0];
+                
+                // Fallback baseline layout mapping
+                chartDataValues[4] = appData.revenue; 
+
+                appData.orders.forEach(o => {
+                    if(o.timestamp) {
+                        const yr = new Date(o.timestamp).getFullYear();
+                        const matchingIdx = labels.indexOf(String(yr));
+                        if(matchingIdx !== -1) {
+                            if(matchingIdx === 4) {
+                                // If current year, prioritize actual order calculation over fallback totals
+                                if(chartDataValues[4] === appData.revenue) chartDataValues[4] = 0; 
+                            }
+                            chartDataValues[matchingIdx] += o.amount;
+                        }
+                    }
+                });
+            }
+
             revChartInstance = new Chart(revCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    labels: labels,
                     datasets: [{ 
                         label: 'Revenue',
-                        data: appData.chartData, 
+                        data: chartDataValues, 
                         borderColor: '#008060', 
                         backgroundColor: gradient, 
                         borderWidth: 3, 
@@ -713,7 +801,7 @@
                         y: { grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false }, beginAtZero: true, border: {display: false} },
                         x: { grid: { display: false }, border: {display: false} }
                     },
-                    animation: { duration: 1000 }
+                    animation: { duration: 800 }
                 }
             });
 
@@ -738,7 +826,7 @@
                         legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
                         tooltip: { enabled: locKeys.length > 0, padding: 12 }
                     },
-                    animation: { duration: 1000 }
+                    animation: { duration: 800 }
                 }
             });
         }
