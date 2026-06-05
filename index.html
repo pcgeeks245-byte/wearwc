@@ -3,276 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Shopify Admin</title>
+    <title>Watch Dashboard - Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* Standardizing system fonts to match Shopify's native feel */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
         body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, Helvetica, sans-serif;
-            background-color: #f4f6f8; 
+            font-family: 'Inter', sans-serif;
             color: #202223; 
+            margin: 0;
+            overflow-x: hidden;
         }
 
-        /* Subtle scrollbars */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #babec3; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #8c9196; }
+        /* --- DYNAMIC BLURRED BACKGROUND --- */
+        .bg-mesh {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: #f4f6f8;
+            z-index: -1;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s infinite ease-in-out alternate;
+        }
+        .blob-1 { background: #34d399; width: 50vw; height: 50vw; top: -10%; left: -10%; animation-delay: 0s; }
+        .blob-2 { background: #60a5fa; width: 40vw; height: 40vw; bottom: 0; right: -10%; animation-delay: -5s; }
+        .blob-3 { background: #a78bfa; width: 45vw; height: 45vw; top: 40%; left: 30%; animation-delay: -10s; }
 
-        /* Shopify Card Shadow */
-        .polaris-card {
-            background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 0 1px rgba(63, 63, 68, 0.05), 0 1px 3px 0 rgba(63, 63, 68, 0.15);
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(30px, 50px) scale(1.1); }
         }
 
-        /* Shopify Inputs */
+        /* --- GLASSMORPHISM CARDS --- */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* --- INPUTS --- */
         .polaris-input {
-            border: 1px solid #c9cccf;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
-            transition: all 0.2s ease;
+            border: 1px solid rgba(201, 204, 207, 0.8);
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 6px;
+            transition: all 0.3s ease;
         }
         .polaris-input:focus {
             outline: none;
             border-color: #008060;
-            box-shadow: 0 0 0 2px rgba(0, 128, 96, 0.2);
+            box-shadow: 0 0 0 3px rgba(0, 128, 96, 0.2);
+            background: #ffffff;
         }
 
-        /* --- POLARIS ENTRANCE ANIMATIONS --- */
+        /* --- SMOOTH ENTRANCE ANIMATIONS --- */
         @keyframes fadeSlideUp {
-            0% { opacity: 0; transform: translateY(12px); }
-            100% { opacity: 1; transform: translateY(0); }
+            0% { opacity: 0; transform: translateY(30px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
         }
         .animate-fade-in {
-            opacity: 0; /* Hidden initially */
-            animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0; 
+            animation: fadeSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         .delay-100 { animation-delay: 100ms; }
         .delay-200 { animation-delay: 200ms; }
         .delay-300 { animation-delay: 300ms; }
         .delay-400 { animation-delay: 400ms; }
-        
-        /* Smooth row highlighting */
-        .table-row-hover:hover {
-            background-color: #f8f9fa;
-        }
+        .delay-500 { animation-delay: 500ms; }
+        .delay-600 { animation-delay: 600ms; }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(186, 190, 195, 0.8); border-radius: 10px; }
     </style>
 </head>
-<body class="flex min-h-screen antialiased selection:bg-[#bae0ff] selection:text-[#005499]">
+<body class="antialiased selection:bg-[#008060]/20 selection:text-[#008060]">
+
+    <!-- ANIMATED BLUR BACKGROUND -->
+    <div class="bg-mesh">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
 
     <!-- MAIN DASHBOARD CONTENT -->
-    <main class="flex-1 p-4 md:p-8 max-w-7xl mx-auto w-full overflow-hidden">
+    <main class="relative p-4 md:p-8 max-w-[1400px] mx-auto w-full pb-32">
         
-        <!-- TOP NAVIGATION & ACTIONS -->
-        <header class="animate-fade-in flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
-            <div>
-                <h1 class="text-[20px] font-bold text-[#202223]">Dashboard</h1>
-            </div>
-            
-            <div class="flex items-center gap-2">
-                <button onclick="exportBackup()" class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
-                    <i class="fa-solid fa-download text-[#6d7175]"></i> Export
-                </button>
-                
-                <div class="relative group">
-                    <input type="file" id="importFile" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="importBackup(event)">
-                    <button class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
-                        <i class="fa-solid fa-upload text-[#6d7175]"></i> Import
-                    </button>
-                </div>
-
-                <button onclick="factoryReset()" class="bg-white hover:bg-[#fff4f4] text-[#d82c0d] text-[13px] font-medium px-3 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors">
-                    Reset
-                </button>
-
-                <button onclick="openOrderModal()" class="ml-2 bg-[#008060] hover:bg-[#006e52] text-white text-[13px] font-medium px-4 py-1.5 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.05)] transition-colors flex items-center gap-2">
-                    Create order
-                </button>
-            </div>
+        <!-- HEADER -->
+        <header class="animate-fade-in mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 tracking-tight">Overview</h1>
+            <p class="text-gray-500 text-sm mt-1">Track your inventory, orders, and watch profitability in real-time.</p>
         </header>
 
         <!-- KPI PERFORMANCE GRID -->
-        <section class="animate-fade-in delay-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <!-- Total Sales -->
-            <div class="polaris-card p-4 flex flex-col justify-between">
-                <div class="flex justify-between items-start mb-2">
-                    <div class="flex items-center gap-2">
-                        <p class="text-[13px] font-medium text-[#6d7175] border-b border-dashed border-[#8c9196] cursor-help" title="Total revenue before deductions">Total sales</p>
-                    </div>
-                    <span class="text-[#008060] text-[12px] font-medium flex items-center gap-1 bg-[#e3f1df] px-1.5 py-0.5 rounded"><i class="fa-solid fa-arrow-trend-up"></i> 12%</span>
+        <section class="animate-fade-in delay-100 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+            <div class="glass-card p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-[14px] font-medium text-gray-500">Total Revenue</p>
+                    <span class="text-[#008060] bg-[#e3f1df] px-2 py-0.5 rounded-full text-[12px] font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> +12%</span>
                 </div>
-                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-revenue">$0.00</h3>
+                <h3 class="text-3xl font-bold text-gray-800" id="kpi-revenue">$0.00</h3>
             </div>
             
-            <!-- Store Sessions (Traffic) -->
-            <div class="polaris-card p-4 flex flex-col justify-between">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-[13px] font-medium text-[#6d7175]">Store sessions</p>
-                    <span class="text-[#008060] text-[12px] font-medium flex items-center gap-1 bg-[#e3f1df] px-1.5 py-0.5 rounded"><i class="fa-solid fa-arrow-trend-up"></i> 8%</span>
+            <div class="glass-card p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-[14px] font-medium text-gray-500">Net Profit</p>
+                    <span class="text-[#008060] bg-[#e3f1df] px-2 py-0.5 rounded-full text-[12px] font-semibold"><i class="fa-solid fa-arrow-trend-up"></i> +18%</span>
                 </div>
-                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-sessions">0</h3>
+                <h3 class="text-3xl font-bold text-gray-800" id="kpi-profit">$0.00</h3>
             </div>
 
-            <!-- Total Orders -->
-            <div class="polaris-card p-4 flex flex-col justify-between">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-[13px] font-medium text-[#6d7175]">Total orders</p>
-                    <span class="text-[#6d7175] text-[12px] font-medium flex items-center gap-1 bg-[#f4f6f8] px-1.5 py-0.5 rounded"><i class="fa-solid fa-minus"></i> 0%</span>
+            <div class="glass-card p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-[14px] font-medium text-gray-500">Total Orders</p>
                 </div>
-                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-orders">0</h3>
+                <h3 class="text-3xl font-bold text-gray-800" id="kpi-orders">0</h3>
             </div>
 
-            <!-- Conversion Rate -->
-            <div class="polaris-card p-4 flex flex-col justify-between">
-                <div class="flex justify-between items-start mb-2">
-                    <p class="text-[13px] font-medium text-[#6d7175] border-b border-dashed border-[#8c9196] cursor-help" title="Percentage of sessions that resulted in an order">Conversion rate</p>
-                    <span class="text-[#d82c0d] text-[12px] font-medium flex items-center gap-1 bg-[#fed3d1] px-1.5 py-0.5 rounded"><i class="fa-solid fa-arrow-trend-down"></i> 1.2%</span>
+            <div class="glass-card p-5 flex flex-col justify-between">
+                <div class="flex justify-between items-start mb-3">
+                    <p class="text-[14px] font-medium text-gray-500">Watches Sold</p>
                 </div>
-                <h3 class="text-2xl font-semibold text-[#202223]" id="kpi-conversion">0.00%</h3>
+                <h3 class="text-3xl font-bold text-gray-800" id="kpi-sold">0</h3>
             </div>
         </section>
 
-        <!-- DATA VISUALIZATION SECTION -->
-        <section class="animate-fade-in delay-200 grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-            <div class="polaris-card p-5 lg:col-span-2 flex flex-col">
-                <h4 class="text-[14px] font-semibold text-[#202223] mb-4">Sales over time</h4>
-                <div class="flex-1 min-h-[250px] relative"><canvas id="revenueChart"></canvas></div>
+        <!-- CHARTS SECTION -->
+        <section class="animate-fade-in delay-200 grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+            <div class="glass-card p-6 lg:col-span-2 flex flex-col">
+                <h4 class="text-[15px] font-semibold text-gray-800 mb-6">Revenue Over Time</h4>
+                <div class="flex-1 min-h-[280px] relative"><canvas id="revenueChart"></canvas></div>
             </div>
 
-            <div class="polaris-card p-5 flex flex-col">
-                <h4 class="text-[14px] font-semibold text-[#202223] mb-4">Sales by location</h4>
-                <div class="flex-1 min-h-[250px] flex justify-center items-center relative"><canvas id="shippingChart"></canvas></div>
+            <div class="glass-card p-6 flex flex-col">
+                <h4 class="text-[15px] font-semibold text-gray-800 mb-6">Sales by Region</h4>
+                <div class="flex-1 min-h-[280px] flex justify-center items-center relative"><canvas id="shippingChart"></canvas></div>
             </div>
         </section>
 
-        <!-- INVENTORY & TOP PRODUCTS SECTION -->
-        <section class="animate-fade-in delay-300 grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-            <!-- Full Inventory Table -->
-            <div class="polaris-card overflow-hidden lg:col-span-2">
-                <div class="px-5 py-4 border-b border-[#e1e3e5]">
-                    <h4 class="text-[14px] font-semibold text-[#202223]">Inventory</h4>
+        <!-- WATCH PROFITABILITY TRACKER (EDITABLE) -->
+        <section class="animate-fade-in delay-300 glass-card overflow-hidden mb-8 border-l-4 border-l-blue-500">
+            <div class="px-6 py-5 border-b border-gray-200/50 flex justify-between items-center bg-white/40">
+                <div>
+                    <h4 class="text-[16px] font-bold text-gray-800">Watch Profitability Tracker</h4>
+                    <p class="text-[12px] text-gray-500 mt-1">Edit costs and selling prices directly to calculate margins.</p>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Editable
+                </div>
+            </div>
+            <div class="overflow-x-auto p-2">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="text-gray-500 text-[12px] font-semibold uppercase tracking-wider">
+                            <th class="px-4 py-3">Watch Model</th>
+                            <th class="px-4 py-3">Cost ($)</th>
+                            <th class="px-4 py-3">Selling Price ($)</th>
+                            <th class="px-4 py-3">Profit/Unit</th>
+                            <th class="px-4 py-3">Units Sold</th>
+                            <th class="px-4 py-3">Total Profit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trackerTableBody" class="divide-y divide-gray-200/50 text-[14px]">
+                        <!-- Dynamically filled -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- INVENTORY & RECENT ORDERS -->
+        <section class="animate-fade-in delay-400 grid grid-cols-1 lg:grid-cols-2 gap-5 mb-12">
+            <!-- Inventory -->
+            <div class="glass-card overflow-hidden flex flex-col">
+                <div class="px-6 py-5 border-b border-gray-200/50 bg-white/40">
+                    <h4 class="text-[15px] font-semibold text-gray-800">Current Inventory</h4>
+                </div>
+                <div class="overflow-x-auto flex-1 p-2">
                     <table class="w-full text-left border-collapse">
                         <thead>
-                            <tr class="bg-[#f4f6f8] border-b border-[#e1e3e5] text-[#202223] text-[12px] font-semibold">
-                                <th class="px-5 py-2.5 w-1/4">SKU</th>
-                                <th class="px-5 py-2.5">Product</th>
-                                <th class="px-5 py-2.5">Price</th>
-                                <th class="px-5 py-2.5">Available</th>
-                                <th class="px-5 py-2.5">Status</th>
+                            <tr class="text-gray-500 text-[12px] font-semibold">
+                                <th class="px-4 py-3">Product</th>
+                                <th class="px-4 py-3 text-center">Available</th>
+                                <th class="px-4 py-3 text-right">Status</th>
                             </tr>
                         </thead>
-                        <tbody id="inventoryTableBody" class="divide-y divide-[#e1e3e5] text-[13px] text-[#202223]">
+                        <tbody id="inventoryTableBody" class="divide-y divide-gray-200/50 text-[13px]">
                             <!-- Dynamically filled -->
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Top Products Widget -->
-            <div class="polaris-card overflow-hidden flex flex-col">
-                <div class="px-5 py-4 border-b border-[#e1e3e5]">
-                    <h4 class="text-[14px] font-semibold text-[#202223]">Top performing products</h4>
+            <!-- Orders -->
+            <div class="glass-card overflow-hidden flex flex-col">
+                <div class="px-6 py-5 border-b border-gray-200/50 bg-white/40">
+                    <h4 class="text-[15px] font-semibold text-gray-800">Recent Orders</h4>
                 </div>
-                <div class="p-5 flex-1 flex flex-col gap-4" id="topProductsList">
-                    <!-- Dynamically filled -->
+                <div class="overflow-x-auto flex-1 p-2">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead>
+                            <tr class="text-gray-500 text-[12px] font-semibold">
+                                <th class="px-4 py-3">Order</th>
+                                <th class="px-4 py-3">Customer</th>
+                                <th class="px-4 py-3">Total</th>
+                                <th class="px-4 py-3 text-center">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody" class="divide-y divide-gray-200/50 text-[13px]">
+                            <!-- Dynamically filled -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </section>
 
-        <!-- RECENT ORDERS SECTION -->
-        <section class="animate-fade-in delay-400 polaris-card overflow-hidden">
-            <div class="px-5 py-4 border-b border-[#e1e3e5] flex justify-between items-center">
-                <h4 class="text-[14px] font-semibold text-[#202223]">Recent orders</h4>
+        <!-- BOTTOM ACTION BAR (DATA MANAGEMENT) -->
+        <section class="animate-fade-in delay-500 flex flex-wrap justify-center gap-4 border-t border-gray-300/50 pt-8 mt-12 pb-12">
+            <button onclick="exportBackup()" class="glass-card hover:bg-white text-gray-700 text-[14px] font-semibold px-6 py-3 transition-all flex items-center gap-2 group">
+                <i class="fa-solid fa-cloud-arrow-down text-blue-500 group-hover:scale-110 transition-transform"></i> Backup Data
+            </button>
+            
+            <div class="relative group">
+                <input type="file" id="importFile" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" onchange="importBackup(event)">
+                <button class="glass-card hover:bg-white text-gray-700 text-[14px] font-semibold px-6 py-3 transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up text-emerald-500 group-hover:scale-110 transition-transform"></i> Restore Data
+                </button>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse whitespace-nowrap">
-                    <thead>
-                        <tr class="bg-[#f4f6f8] border-b border-[#e1e3e5] text-[#202223] text-[12px] font-semibold">
-                            <th class="px-5 py-2.5">Order</th>
-                            <th class="px-5 py-2.5">Date</th>
-                            <th class="px-5 py-2.5">Customer</th>
-                            <th class="px-5 py-2.5">Fulfillment status</th>
-                            <th class="px-5 py-2.5">Total</th>
-                            <th class="px-5 py-2.5 text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="ordersTableBody" class="divide-y divide-[#e1e3e5] text-[13px] text-[#202223]">
-                        <!-- Dynamically filled -->
-                    </tbody>
-                </table>
-            </div>
+
+            <button onclick="factoryReset()" class="glass-card hover:bg-red-50 text-red-600 text-[14px] font-semibold px-6 py-3 transition-all flex items-center gap-2 group">
+                <i class="fa-solid fa-rotate-right text-red-500 group-hover:-rotate-180 transition-transform duration-500"></i> Factory Reset
+            </button>
         </section>
+
     </main>
 
+    <!-- FLOATING ACTION BUTTON (CREATE ORDER +) -->
+    <button onclick="openOrderModal()" class="fixed bottom-8 right-8 z-40 bg-gradient-to-r from-[#008060] to-[#006e52] text-white rounded-full w-16 h-16 flex items-center justify-center shadow-2xl hover:scale-110 hover:shadow-[0_0_20px_rgba(0,128,96,0.6)] transition-all duration-300 group">
+        <i class="fa-solid fa-plus text-2xl group-hover:rotate-90 transition-transform duration-300"></i>
+    </button>
+
     <!-- CREATE ORDER MODAL -->
-    <div id="addOrderModal" class="fixed inset-0 bg-[#202223]/50 backdrop-blur-[2px] hidden flex justify-center items-center z-50 p-4 transition-opacity">
-        <div class="bg-white rounded-xl shadow-2xl w-full max-w-xl flex flex-col max-h-[90vh] animate-fade-in">
-            <div class="px-5 py-4 border-b border-[#e1e3e5] flex justify-between items-center">
-                <h2 class="text-[16px] font-semibold text-[#202223]">Create order</h2>
-                <button onclick="closeModal('addOrderModal')" class="text-[#6d7175] hover:text-[#202223] transition-colors rounded-full p-1 hover:bg-[#f4f6f8]">
-                    <i class="fa-solid fa-xmark text-lg"></i>
+    <div id="addOrderModal" class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm hidden flex justify-center items-center z-50 p-4 transition-opacity">
+        <div class="glass-card bg-white/95 w-full max-w-lg flex flex-col max-h-[90vh] shadow-2xl animate-fade-in border-0">
+            <div class="px-6 py-5 border-b border-gray-200 flex justify-between items-center">
+                <h2 class="text-[18px] font-bold text-gray-800">Record New Sale</h2>
+                <button onclick="closeModal('addOrderModal')" class="text-gray-400 hover:text-red-500 transition-colors rounded-full p-2 hover:bg-red-50">
+                    <i class="fa-solid fa-xmark text-xl"></i>
                 </button>
             </div>
             
-            <form id="orderForm" onsubmit="addOrder(event)" class="overflow-y-auto p-5">
-                
-                <div class="mb-6">
-                    <h3 class="text-[13px] font-semibold text-[#202223] mb-3">Customer</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[13px] text-[#202223] mb-1">First and last name</label>
-                            <input type="text" id="clientName" required class="polaris-input w-full px-3 py-2 text-[13px]">
-                        </div>
-                        <div>
-                            <label class="block text-[13px] text-[#202223] mb-1">Email or phone</label>
-                            <input type="text" id="clientContact" class="polaris-input w-full px-3 py-2 text-[13px]">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-[13px] text-[#202223] mb-1">Shipping address (City, Country)</label>
-                            <input type="text" id="clientDest" required placeholder="e.g. Paris, France" class="polaris-input w-full px-3 py-2 text-[13px]">
-                        </div>
-                    </div>
+            <form id="orderForm" onsubmit="addOrder(event)" class="overflow-y-auto p-6">
+                <div class="mb-5">
+                    <label class="block text-[13px] font-semibold text-gray-700 mb-2">Customer Details</label>
+                    <input type="text" id="clientName" required placeholder="Full Name" class="polaris-input w-full px-4 py-2.5 text-[14px] mb-3">
+                    <input type="text" id="clientDest" required placeholder="Location (City, Country)" class="polaris-input w-full px-4 py-2.5 text-[14px]">
                 </div>
 
-                <hr class="border-[#e1e3e5] mb-6">
-
-                <div>
-                    <h3 class="text-[13px] font-semibold text-[#202223] mb-3">Products</h3>
-                    <div class="grid grid-cols-1 gap-4">
+                <div class="mb-5">
+                    <label class="block text-[13px] font-semibold text-gray-700 mb-2">Watch Sold</label>
+                    <select id="productSelect" required onchange="updateFormPrice()" class="polaris-input w-full px-4 py-2.5 text-[14px] cursor-pointer mb-3">
+                        <!-- Loaded dynamically -->
+                    </select>
+                    
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-[13px] text-[#202223] mb-1">Search products</label>
-                            <select id="productSelect" required onchange="updateFormPrice()" class="polaris-input w-full px-3 py-2 text-[13px] bg-white cursor-pointer">
-                                <!-- Loaded dynamically -->
+                            <label class="block text-[12px] text-gray-500 mb-1">Selling Price ($)</label>
+                            <input type="number" id="amountInput" step="0.01" required class="polaris-input w-full px-4 py-2.5 text-[14px] font-semibold text-emerald-600">
+                        </div>
+                        <div>
+                            <label class="block text-[12px] text-gray-500 mb-1">Status</label>
+                            <select id="statusInput" class="polaris-input w-full px-4 py-2.5 text-[14px] cursor-pointer">
+                                <option value="Fulfilled">Fulfilled</option>
+                                <option value="Unfulfilled">Unfulfilled</option>
                             </select>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[13px] text-[#202223] mb-1">Price ($)</label>
-                                <input type="number" id="amountInput" step="0.01" required class="polaris-input w-full px-3 py-2 text-[13px]">
-                            </div>
-                            <div>
-                                <label class="block text-[13px] text-[#202223] mb-1">Status</label>
-                                <select id="statusInput" class="polaris-input w-full px-3 py-2 text-[13px] bg-white cursor-pointer">
-                                    <option value="Unfulfilled">Unfulfilled</option>
-                                    <option value="Fulfilled">Fulfilled</option>
-                                    <option value="Partially fulfilled">Partially fulfilled</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
-                <div class="mt-8 flex gap-3 justify-end border-t border-[#e1e3e5] pt-4 -mx-5 px-5">
-                    <button type="button" onclick="closeModal('addOrderModal')" class="bg-white hover:bg-[#f6f6f7] text-[#202223] text-[13px] font-medium px-4 py-1.5 rounded border border-[#c9cccf] shadow-[0_1px_2px_rgba(0,0,0,0.05)] transition-colors">Cancel</button>
-                    <button type="submit" class="bg-[#008060] hover:bg-[#006e52] text-white text-[13px] font-medium px-4 py-1.5 rounded shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.05)] transition-colors">Save</button>
-                </div>
+                <button type="submit" class="w-full bg-[#008060] hover:bg-[#006e52] text-white text-[15px] font-bold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all mt-4">
+                    Complete Order
+                </button>
             </form>
         </div>
     </div>
@@ -282,79 +307,75 @@
         const defaultData = {
             revenue: 0,
             ordersCount: 0,
-            sessions: 142, // Mock baseline traffic
+            watchesSold: 0,
             chartData: [0, 0, 0, 0, 0, 0], 
             locations: {}, 
             orders: [],
             inventory: [
-                { id: 'SKU-OB-01', name: 'Obsidian Chronograph', stock: 25, price: 349.00, timesSold: 0 },
-                { id: 'SKU-VG-02', name: 'Vanguard Emerald Edition', stock: 12, price: 420.00, timesSold: 0 },
-                { id: 'SKU-SN-03', name: 'Stealth Noir Minimalist', stock: 40, price: 195.00, timesSold: 0 },
-                { id: 'SKU-AQ-04', name: 'Aqua-Dive Pro Automatic', stock: 8, price: 650.00, timesSold: 0 },
-                { id: 'SKU-CL-05', name: 'Classic Leather Heritage', stock: 18, price: 280.00, timesSold: 0 }
+                { id: 'SKU-OB-01', name: 'Obsidian Chronograph', stock: 25, cost: 120.00, price: 349.00, timesSold: 0 },
+                { id: 'SKU-VG-02', name: 'Vanguard Emerald Edition', stock: 12, cost: 180.00, price: 420.00, timesSold: 0 },
+                { id: 'SKU-SN-03', name: 'Stealth Noir Minimalist', stock: 40, cost: 75.00, price: 195.00, timesSold: 0 },
+                { id: 'SKU-AQ-04', name: 'Aqua-Dive Pro Automatic', stock: 8, cost: 310.00, price: 650.00, timesSold: 0 },
+                { id: 'SKU-CL-05', name: 'Classic Leather Heritage', stock: 18, cost: 90.00, price: 280.00, timesSold: 0 }
             ]
         };
 
-        let appData = JSON.parse(localStorage.getItem('shopifyCloneData')) || defaultData;
+        let appData = JSON.parse(localStorage.getItem('watchDataPro')) || defaultData;
         
-        // Data migration check for newly added fields (like timesSold and sessions)
-        if(appData.sessions === undefined) appData.sessions = appData.ordersCount * 15 + 142;
-        appData.inventory.forEach(i => { if(i.timesSold === undefined) i.timesSold = 0; });
+        // Migration to ensure 'cost' exists if user is coming from previous version
+        appData.inventory.forEach(i => { if(i.cost === undefined) i.cost = i.price * 0.4; });
 
         let revChartInstance = null;
         let shipChartInstance = null;
 
         function renderDashboard() {
-            // Calculated Tracking Metrics
-            const convRate = appData.sessions > 0 ? ((appData.ordersCount / appData.sessions) * 100).toFixed(2) : "0.00";
+            let totalProfit = 0;
+            appData.inventory.forEach(item => {
+                totalProfit += (item.price - item.cost) * item.timesSold;
+            });
 
-            // KPI Sync
+            // KPIs
             document.getElementById('kpi-revenue').innerText = '$' + appData.revenue.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('kpi-profit').innerText = '$' + totalProfit.toLocaleString(undefined, {minimumFractionDigits: 2});
             document.getElementById('kpi-orders').innerText = appData.ordersCount.toLocaleString();
-            document.getElementById('kpi-sessions').innerText = appData.sessions.toLocaleString();
-            document.getElementById('kpi-conversion').innerText = convRate + '%';
+            document.getElementById('kpi-sold').innerText = appData.watchesSold.toLocaleString();
 
-            // Top Products Tracker Widget
-            const topProductsContainer = document.getElementById('topProductsList');
-            topProductsContainer.innerHTML = '';
-            
-            // Sort by most sold, get top 3
-            const topProducts = [...appData.inventory].sort((a, b) => b.timesSold - a.timesSold).slice(0, 3);
-            
-            if(appData.ordersCount === 0) {
-                topProductsContainer.innerHTML = `<p class="text-[#6d7175] text-[13px] text-center mt-4">Make a sale to see top products</p>`;
-            } else {
-                topProducts.forEach(item => {
-                    const revenueGenerated = item.timesSold * item.price;
-                    topProductsContainer.innerHTML += `
-                        <div class="flex justify-between items-center bg-[#f4f6f8] p-3 rounded border border-[#e1e3e5] hover:bg-[#ebeef0] transition-colors cursor-default">
-                            <div>
-                                <p class="text-[13px] font-semibold text-[#202223] mb-0.5 truncate w-[160px]" title="${item.name}">${item.name}</p>
-                                <p class="text-[12px] text-[#6d7175]">${item.timesSold} sales</p>
-                            </div>
-                            <div class="text-right">
-                                <p class="text-[13px] font-medium text-[#202223]">$${revenueGenerated.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
-                            </div>
-                        </div>
-                    `;
-                });
-            }
+            // Tracker Table (Editable)
+            const trackerTable = document.getElementById('trackerTableBody');
+            trackerTable.innerHTML = '';
+            appData.inventory.forEach(item => {
+                const profitPerUnit = item.price - item.cost;
+                const totalItemProfit = profitPerUnit * item.timesSold;
+                const profitColor = profitPerUnit >= 0 ? 'text-emerald-600' : 'text-red-500';
 
-            // Inventory Table
+                trackerTable.innerHTML += `
+                    <tr class="hover:bg-white/50 transition-colors">
+                        <td class="px-4 py-4 font-medium text-gray-800">${item.name}</td>
+                        <td class="px-4 py-4">
+                            <input type="number" step="0.01" value="${item.cost.toFixed(2)}" onchange="updateItem('${item.id}', 'cost', this.value)" class="polaris-input w-24 px-2 py-1.5 text-center font-mono">
+                        </td>
+                        <td class="px-4 py-4">
+                            <input type="number" step="0.01" value="${item.price.toFixed(2)}" onchange="updateItem('${item.id}', 'price', this.value)" class="polaris-input w-24 px-2 py-1.5 text-center font-mono text-emerald-600 font-semibold">
+                        </td>
+                        <td class="px-4 py-4 font-semibold ${profitColor}">$${profitPerUnit.toFixed(2)}</td>
+                        <td class="px-4 py-4 text-gray-600 font-medium">${item.timesSold}</td>
+                        <td class="px-4 py-4 font-bold text-gray-800">$${totalItemProfit.toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+
+            // Inventory Simple Table
             const invTable = document.getElementById('inventoryTableBody');
             invTable.innerHTML = '';
             appData.inventory.forEach(item => {
-                let stockStatus = item.stock > 10 ? '<span class="bg-[#aee9d1] text-[#006e52] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Active</span>' : 
-                                  item.stock > 0 ? '<span class="bg-[#ffea8a] text-[#8a6116] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Low stock</span>' : 
-                                  '<span class="bg-[#fed3d1] text-[#8c2626] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Out of stock</span>';
-                
+                let stockStatus = item.stock > 10 ? '<span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase">In Stock</span>' : 
+                                  item.stock > 0 ? '<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase">Low Stock</span>' : 
+                                  '<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-[11px] font-bold uppercase">Sold Out</span>';
                 invTable.innerHTML += `
-                    <tr class="table-row-hover transition-colors cursor-default">
-                        <td class="px-5 py-3 text-[#6d7175] font-mono text-[12px]">${item.id}</td>
-                        <td class="px-5 py-3 font-medium text-[#202223] hover:underline cursor-pointer">${item.name}</td>
-                        <td class="px-5 py-3">$${item.price.toFixed(2)}</td>
-                        <td class="px-5 py-3 ${item.stock <= 5 ? 'text-[#d82c0d] font-semibold' : ''}">${item.stock}</td>
-                        <td class="px-5 py-3">${stockStatus}</td>
+                    <tr class="hover:bg-white/50 transition-colors">
+                        <td class="px-4 py-3 font-medium text-gray-800">${item.name}</td>
+                        <td class="px-4 py-3 text-center ${item.stock <= 5 ? 'text-red-500 font-bold' : 'text-gray-600'}">${item.stock}</td>
+                        <td class="px-4 py-3 text-right">${stockStatus}</td>
                     </tr>
                 `;
             });
@@ -363,23 +384,17 @@
             const orderTable = document.getElementById('ordersTableBody');
             orderTable.innerHTML = '';
             if (appData.orders.length === 0) {
-                orderTable.innerHTML = `<tr><td colspan="6" class="px-5 py-8 text-center text-[#6d7175]">No orders found</td></tr>`;
+                orderTable.innerHTML = `<tr><td colspan="4" class="px-4 py-6 text-center text-gray-500 italic">No sales recorded yet. Use the + button to add one.</td></tr>`;
             } else {
                 appData.orders.forEach((order, index) => {
-                    let statusBadge = order.status === 'Fulfilled' ? '<span class="bg-[#e3f1df] text-[#2c6e2f] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Fulfilled</span>' : 
-                                      order.status === 'Partially fulfilled' ? '<span class="bg-[#ffea8a] text-[#8a6116] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Partially fulfilled</span>' : 
-                                      '<span class="bg-[#e4e5e7] text-[#42474c] px-2.5 py-0.5 rounded-xl text-[12px] font-medium">Unfulfilled</span>';
-
                     orderTable.innerHTML += `
-                        <tr class="table-row-hover transition-colors">
-                            <td class="px-5 py-3 font-semibold text-[#202223] hover:underline cursor-pointer">#${order.id}</td>
-                            <td class="px-5 py-3 text-[#6d7175]">${order.date || 'Today'}</td>
-                            <td class="px-5 py-3">${order.clientName}</td>
-                            <td class="px-5 py-3">${statusBadge}</td>
-                            <td class="px-5 py-3 font-medium">$${order.amount.toFixed(2)}</td>
-                            <td class="px-5 py-3 text-center">
-                                <button onclick="deleteOrder(${index})" class="text-[#6d7175] hover:text-[#d82c0d] p-1 rounded hover:bg-[#fed3d1] transition-colors" title="Delete order">
-                                    <i class="fa-solid fa-trash-can"></i>
+                        <tr class="hover:bg-white/50 transition-colors">
+                            <td class="px-4 py-3 font-bold text-gray-800">#${order.id}</td>
+                            <td class="px-4 py-3 text-gray-600">${order.clientName}</td>
+                            <td class="px-4 py-3 font-bold text-emerald-600">$${order.amount.toFixed(2)}</td>
+                            <td class="px-4 py-3 text-center">
+                                <button onclick="deleteOrder(${index})" class="text-gray-400 hover:text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-all" title="Delete">
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
                             </td>
                         </tr>
@@ -388,12 +403,22 @@
             }
 
             renderCharts();
-            localStorage.setItem('shopifyCloneData', JSON.stringify(appData));
+            localStorage.setItem('watchDataPro', JSON.stringify(appData));
+        }
+
+        // Handle Live Editing in Tracker
+        function updateItem(id, field, value) {
+            const numValue = parseFloat(value) || 0;
+            const item = appData.inventory.find(i => i.id === id);
+            if(item) {
+                item[field] = numValue;
+                renderDashboard();
+            }
         }
 
         function openOrderModal() {
             const select = document.getElementById('productSelect');
-            select.innerHTML = '<option value="" disabled selected>Browse products...</option>';
+            select.innerHTML = '<option value="" disabled selected>Select a watch...</option>';
             appData.inventory.forEach(item => {
                 if (item.stock > 0) {
                     select.innerHTML += `<option value="${item.id}">${item.name} - $${item.price}</option>`;
@@ -417,33 +442,25 @@
             e.preventDefault();
             const skuId = document.getElementById('productSelect').value;
             const productObj = appData.inventory.find(i => i.id === skuId);
-            
-            if(!productObj) return alert("Please select a valid product.");
+            if(!productObj) return alert("Please select a watch.");
 
             const amount = parseFloat(document.getElementById('amountInput').value);
             const clientName = document.getElementById('clientName').value;
-            const clientContact = document.getElementById('clientContact').value;
             const dest = document.getElementById('clientDest').value;
             const status = document.getElementById('statusInput').value;
-            const newId = Math.floor(1000 + Math.random() * 9000);
+            const newId = Math.floor(10000 + Math.random() * 90000);
             
-            const dateObj = new Date();
-            const dateStr = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-
-            appData.orders.unshift({ id: newId, date: dateStr, product: productObj.name, skuId, clientName, clientContact, dest, status, amount });
+            appData.orders.unshift({ id: newId, product: productObj.name, skuId, clientName, dest, status, amount });
             
-            // Update tracking metrics
             appData.revenue += amount;
             appData.ordersCount += 1;
-            appData.sessions += Math.floor(Math.random() * 5) + 1; // Fake organic traffic spike per order
+            appData.watchesSold += 1;
             
             productObj.stock -= 1; 
-            productObj.timesSold += 1; // Used for Top Products widget
+            productObj.timesSold += 1; 
             
-            let country = dest.split(',').pop().trim();
-            if(!country) country = "Other";
+            let country = dest.split(',').pop().trim() || "Other";
             appData.locations[country] = (appData.locations[country] || 0) + 1;
-
             appData.chartData[appData.chartData.length - 1] += amount;
 
             closeModal('addOrderModal');
@@ -451,11 +468,11 @@
         }
 
         function deleteOrder(index) {
-            if(confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+            if(confirm('Delete this order completely?')) {
                 const order = appData.orders[index];
-                
                 appData.revenue -= order.amount;
                 appData.ordersCount -= 1;
+                appData.watchesSold -= 1;
                 
                 const productObj = appData.inventory.find(i => i.id === order.skuId);
                 if(productObj) {
@@ -475,124 +492,106 @@
             }
         }
 
+        // Backup & Restore
         function exportBackup() {
             const dataStr = JSON.stringify(appData, null, 4);
             const blob = new Blob([dataStr], { type: "application/json" });
-            const blobUrl = URL.createObjectURL(blob);
-            
-            const downloadAnchorNode = document.createElement('a');
-            downloadAnchorNode.setAttribute("href", blobUrl);
-            downloadAnchorNode.setAttribute("download", "shopify_export_" + new Date().toISOString().split('T')[0] + ".json");
-            document.body.appendChild(downloadAnchorNode);
-            
-            downloadAnchorNode.click();
-            downloadAnchorNode.remove();
-            URL.revokeObjectURL(blobUrl);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "watch_business_backup.json";
+            a.click();
+            URL.revokeObjectURL(url);
         }
 
         function importBackup(event) {
             const file = event.target.files[0];
             if (!file) return;
-            
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const importedData = JSON.parse(e.target.result);
-                    if(importedData && importedData.inventory && importedData.orders) {
-                        appData = importedData;
+                    const data = JSON.parse(e.target.result);
+                    if(data.inventory && data.orders) {
+                        appData = data;
                         renderDashboard();
-                    } else { 
-                        alert('Invalid Shopify export file.'); 
+                        alert("Data restored successfully!");
                     }
-                } catch (err) { 
-                    alert('Error reading file.'); 
-                }
+                } catch (err) { alert('Invalid backup file.'); }
             };
             reader.readAsText(file);
         }
 
         function factoryReset() {
-            if(confirm('Clear all data and reset to default?')) {
+            if(confirm('WARNING: This will wipe all data. Are you sure?')) {
                 appData = JSON.parse(JSON.stringify(defaultData)); 
                 renderDashboard();
             }
         }
 
-        // CHARTS CONFIGURATION
-        Chart.defaults.color = '#6d7175'; 
+        // Chart Configurations
+        Chart.defaults.color = '#6b7280';
         Chart.defaults.font.family = 'Inter';
-        Chart.defaults.font.size = 12;
 
         function renderCharts() {
             if(revChartInstance) revChartInstance.destroy();
             if(shipChartInstance) shipChartInstance.destroy();
 
-            // Setup chart canvas to correctly size based on container
-            const revCanvas = document.getElementById('revenueChart');
-            const shipCanvas = document.getElementById('shippingChart');
+            const revCtx = document.getElementById('revenueChart').getContext('2d');
+            
+            // Create gradient for line chart
+            let gradient = revCtx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(0, 128, 96, 0.4)');
+            gradient.addColorStop(1, 'rgba(0, 128, 96, 0.0)');
 
-            revChartInstance = new Chart(revCanvas.getContext('2d'), {
+            revChartInstance = new Chart(revCtx, {
                 type: 'line',
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
                     datasets: [{ 
-                        label: 'Sales',
+                        label: 'Revenue',
                         data: appData.chartData, 
                         borderColor: '#008060', 
-                        backgroundColor: 'rgba(0, 128, 96, 0.05)', 
-                        borderWidth: 2, 
+                        backgroundColor: gradient, 
+                        borderWidth: 3, 
                         fill: true, 
-                        tension: 0.3, /* Smoothed line for Polaris look */
-                        pointBackgroundColor: '#008060',
-                        pointBorderColor: '#ffffff',
+                        tension: 0.4, // Super smooth curves
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#008060',
                         pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
+                        pointRadius: 5,
+                        pointHoverRadius: 7
                     }]
                 },
                 options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    plugins: { 
-                        legend: { display: false },
-                        tooltip: { backgroundColor: '#202223', padding: 10, cornerRadius: 4 }
-                    }, 
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false }, tooltip: { padding: 12, cornerRadius: 8, titleFont: {size: 14} } },
                     scales: { 
-                        y: { grid: { color: '#f4f6f8', drawBorder: false }, beginAtZero: true, border: {display: false} }, 
-                        x: { grid: { display: false }, border: {display: false} } 
+                        y: { grid: { color: 'rgba(0,0,0,0.05)', drawBorder: false }, beginAtZero: true, border: {display: false} },
+                        x: { grid: { display: false }, border: {display: false} }
                     },
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    }
+                    animation: { duration: 1500, easing: 'easeOutQuart' }
                 }
             });
 
             const locKeys = Object.keys(appData.locations);
             const locValues = Object.values(appData.locations);
-            
             const chartLabels = locKeys.length > 0 ? locKeys : ['No data'];
             const chartData = locValues.length > 0 ? locValues : [1];
-            const chartColors = locValues.length > 0 ? ['#5c6ac4', '#47c1bf', '#008060', '#f49342', '#ba79c4'] : ['#e1e3e5'];
+            const colors = ['#3b82f6', '#10b981', '#6366f1', '#f59e0b', '#ec4899'];
 
-            shipChartInstance = new Chart(shipCanvas.getContext('2d'), {
+            shipChartInstance = new Chart(document.getElementById('shippingChart').getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: chartLabels,
-                    datasets: [{ data: chartData, backgroundColor: chartColors, borderWidth: 2, borderColor: '#ffffff', hoverOffset: 4 }]
+                    datasets: [{ data: chartData, backgroundColor: locValues.length > 0 ? colors : ['#e5e7eb'], borderWidth: 0, hoverOffset: 8 }]
                 },
                 options: { 
-                    responsive: true, 
-                    maintainAspectRatio: false, 
-                    cutout: '72%',
+                    responsive: true, maintainAspectRatio: false, cutout: '75%',
                     plugins: { 
-                        legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 20 } },
-                        tooltip: { enabled: locKeys.length > 0, backgroundColor: '#202223' }
+                        legend: { position: 'bottom', labels: { usePointStyle: true, padding: 20 } },
+                        tooltip: { enabled: locKeys.length > 0, padding: 12 }
                     },
-                    animation: {
-                        duration: 1000,
-                        easing: 'easeOutQuart'
-                    }
+                    animation: { duration: 1500, easing: 'easeOutBounce' }
                 }
             });
         }
