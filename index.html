@@ -285,19 +285,19 @@
     </div>
 
     <script type="module">
-        // 1. IMPORT FIREBASE DIRECTLY FROM MODULE CDN
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
-        // 2. PASTE YOUR CONFIG OBJECT HERE (See Step 2)
+        // Your exact personal project configuration credentials injected
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDcgwALWKIepi7THprbTpaKUws4V4XubtQ",
+            authDomain: "watch-tracker-33e5d.firebaseapp.com",
+            databaseURL: "https://watch-tracker-33e5d-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "watch-tracker-33e5d",
+            storageBucket: "watch-tracker-33e5d.firebasestorage.app",
+            messagingSenderId: "778743909017",
+            appId: "1:778743909017:web:b6b8fe6d6994ba60654608",
+            measurementId: "G-47JV0QF09Q"
         };
 
         // Initialize Firebase instances
@@ -325,8 +325,7 @@
         let revChartInstance = null;
         let shipChartInstance = null;
 
-        // 3. LISTEN TO DATABASE IN REAL-TIME
-        // Triggers instantly on initial run and automatically updates across phone & PC on mutations.
+        // Listen to database in real-time
         onValue(dataRef, (snapshot) => {
             const incomingCloudData = snapshot.val();
             if (incomingCloudData) {
@@ -335,7 +334,6 @@
                 appData = JSON.parse(JSON.stringify(defaultData));
             }
             
-            // Internal Array Verification
             if(!appData.orders) appData.orders = [];
             if(!appData.locations) appData.locations = {};
             if(!appData.chartData) appData.chartData = [0,0,0,0,0,0];
@@ -344,7 +342,6 @@
             renderDashboardUI();
         });
 
-        // 4. WRITE BACK TO FIREBASE STORAGE
         function syncToCloud() {
             set(dataRef, appData);
         }
@@ -426,7 +423,6 @@
             renderCharts();
         }
 
-        // Functional Scope Mutations (Synced to Cloud Storage Engine)
         function updateItem(id, field, value) {
             const numValue = parseFloat(value) || 0;
             const item = appData.inventory.find(i => i.id === id);
@@ -547,7 +543,7 @@
             }
         }
 
-        // Charts Rendering Engine
+        // Charts Engine
         Chart.defaults.color = '#6b7280';
         Chart.defaults.font.family = 'Inter';
 
@@ -619,7 +615,7 @@
             });
         }
 
-        // BRIDGE MODULE SCOPE ENGINES TO WINDOW FOR INTERACTIVE HTML BINDINGS
+        // Bind internal scope modules to window for interactive HTML actions
         window.updateItem = updateItem;
         window.openOrderModal = openOrderModal;
         window.closeModal = closeModal;
